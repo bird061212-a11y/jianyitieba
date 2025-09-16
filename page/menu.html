@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>贴吧管理员菜单管理</title>
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        .layui-btn:not(.layui-btn-lg ):not(.layui-btn-sm):not(.layui-btn-xs) {
+            height: 34px;
+            line-height: 34px;
+            padding: 0 8px;
+        }
+        .layuimini-container {
+            margin: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .layui-badge-teal {
+            background-color: #52c41a;
+        }
+        .layui-badge-orange {
+            background-color: #fa8c16;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <blockquote class="layui-elem-quote">
+            贴吧管理员核心菜单管理，涵盖板块运营、用户管理、内容审核全流程权限配置<br>
+            <a href="https://gitee.com/whvse/treetable-lay" target="_blank" class="layui-btn layui-btn-primary">组件文档参考</a>
+        </blockquote>
+        <div class="layui-btn-group" style="margin-bottom: 15px;">
+            <button class="layui-btn" id="btn-expand">全部展开</button>
+            <button class="layui-btn layui-btn-normal" id="btn-fold">全部折叠</button>
+            <button class="layui-btn layui-btn-danger" id="btn-refresh">刷新菜单</button>
+            <button class="layui-btn layui-btn-warm" id="btn-add">新增菜单</button>
+        </div>
+        <table id="menu-table" class="layui-table" lay-filter="menu-table"></table>
+    </div>
+</div>
+
+<!-- 操作列模板 -->
+<script type="text/html" id="menu-operate">
+    <div class="layui-btn-group">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="addChild">添加子项</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </div>
+</script>
+
+<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['table', 'treetable', 'layer'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var treetable = layui.treetable;
+        var layer = layui.layer;
+
+        // 渲染管理员菜单表格
+        var renderTable = function() {
+            layer.load(2);
+            treetable.render({
+                treeColIndex: 1,  // 树形结构所在列
+                treeSpid: -1,     // 顶级节点ID
+                treeIdName: 'menuId',  // 节点唯一标识字段
+                treePidName: 'parentId',  // 父节点标识字段
+                elem: '#menu-table',
+                // 模拟贴吧管理员菜单数据（实际项目替换为接口）
+                data: [
+                    {
+                        menuId: 1,
+                        menuName: '贴吧运营管理',
+                        menuKey: 'tieba:operation',
+                        menuUrl: '/admin/operation',
+                        sortNum: 1,
+                        menuType: 1,
+                        status: 1,
+                        parentId: -1
+                    },
+                    {
+                        menuId: 101,
+                        menuName: '板块管理',
+                        menuKey: 'tieba:operation:board',
+                        menuUrl: '/admin/operation/board',
+                        sortNum: 1,
+                        menuType: 2,
+                        status: 1,
+                        parentId: 1
+                    },
+                    {
+                        menuId: 10101,
+                        menuName: '新增板块',
+                        menuKey: 'tieba:operation:board:add',
+                        menuUrl: '/admin/operation/board/add',
+                        sortNum: 1,
+                        menuType: 3,
+                        status: 1,
+                        parentId: 101
+                    },
+                    {
+                        menuId: 10102,
+                        menuName: '板块排序',
+                        menuKey: 'tieba:operation:board:sort',
+                        menuUrl: '/admin/operation/board/sort',
+                        sortNum: 2,
+                        menuType: 3,
+                        status: 1,
+                        parentId: 101
+                    },
+                    {
+                        menuId: 102,
+                        menuName: '精品帖管理',
+                        menuKey: 'tieba:operation:elite',
+                        menuUrl: '/admin/operation/elite',
+                        sortNum: 2,
+                        menuType: 2,
+                        status: 1,
+                        parentId: 1
+                    },
+                    {
+                        menuId: 2,
+                        menuName: '用户管理中心',
+                        menuKey: 'tieba:user',
+                        menuUrl: '/admin/user',
+                        sortNum: 2,
+                        menuType: 1,
+                        status: 1,
+                        parentId: -1
+                    },
+                    {
+                        menuId: 201,
+                        menuName: '用户列表',
+                        menuKey: 'tieba:user:list',
+                        menuUrl: '/admin/user/list',
+                        sortNum: 1,
+                        menuType: 2,
+                        status: 1,
+                        parentId: 2
+                    },
+                    {
+                        menuId: 202,
+                        menuName: '管理员配置',
+                        menuKey: 'tieba:user:admin',
+                        menuUrl: '/admin/user/admin',
+                        sortNum: 2,
+                        menuType: 2,
+                        status: 1,
+                        parentId: 2
+                    },
+                    {
+                        menuId: 3,
+                        menuName: '内容审核系统',
+                        menuKey: 'tieba:audit',
+                        menuUrl: '/admin/audit',
+                        sortNum: 3,
+                        menuType: 1,
+                        status: 1,
+                        parentId: -1
+                    },
+                    {
+                        menuId: 301,
+                        menuName: '帖子审核',
+                        menuKey: 'tieba:audit:post',
+                        menuUrl: '/admin/audit/post',
+                        sortNum: 1,
+                        menuType: 2,
+                        status: 1,
+                        parentId: 3
+                    },
+                    {
+                        menuId: 302,
+                        menuName: '评论审核',
+                        menuKey: 'tieba:audit:comment',
+                        menuUrl: '/admin/audit/comment',
+                        sortNum: 2,
+                        menuType: 2,
+                        status: 1,
+                        parentId: 3
+                    },
+                    {
+                        menuId: 4,
+                        menuName: '系统设置',
+                        menuKey: 'tieba:system',
+                        menuUrl: '/admin/system',
+                        sortNum: 4,
+                        menuType: 1,
+                        status: 0,
+                        parentId: -1
+                    }
+                ],
+                page: false,
+                cols: [[
+                    {type: 'numbers', title: '序号'},
+                    {field: 'menuName', minWidth: 220, title: '菜单名称', style: 'font-weight: 500;'},
+                    {field: 'menuKey', title: '权限标识', minWidth: 150},
+                    {field: 'menuUrl', title: '访问路径', minWidth: 180},
+                    {field: 'sortNum', width: 80, align: 'center', title: '排序号'},
+                    {
+                        field: 'menuType', width: 100, align: 'center', 
+                        templet: function (d) {
+                            if (d.menuType === 1) {
+                                return '<span class="layui-badge layui-bg-blue">一级目录</span>';
+                            } else if (d.menuType === 2) {
+                                return '<span class="layui-badge layui-bg-green">二级菜单</span>';
+                            } else {
+                                return '<span class="layui-badge layui-bg-orange">功能按钮</span>';
+                            }
+                        }, 
+                        title: '菜单类型'
+                    },
+                    {
+                        field: 'status', width: 80, align: 'center', 
+                        templet: function (d) {
+                            return d.status === 1 ? 
+                                '<span class="layui-badge layui-badge-teal">启用</span>' : 
+                                '<span class="layui-badge layui-bg-gray">禁用</span>';
+                        }, 
+                        title: '状态'
+                    },
+                    {templet: '#menu-operate', width: 180, align: 'center', title: '操作'}
+                ]],
+                done: function () {
+                    layer.closeAll('loading');
+                }
+            });
+        };
+
+        // 初始渲染
+        renderTable();
+
+        // 全部展开
+        $('#btn-expand').click(function () {
+            treetable.expandAll('#menu-table');
+        });
+
+        // 全部折叠
+        $('#btn-fold').click(function () {
+            treetable.foldAll('#menu-table');
+        });
+
+        // 刷新菜单
+        $('#btn-refresh').click(function () {
+            renderTable();
+            layer.msg('菜单已刷新', {icon: 1, time: 1000});
+        });
+
+        // 新增菜单
+        $('#btn-add').click(function () {
+            layer.open({
+                type: 2,
+                title: '新增顶级目录',
+                area: ['500px', '400px'],
+                content: '../pages/admin/menu-add.html?parentId=-1',
+                end: function() {
+                    renderTable();
+                }
+            });
+        });
+
+        // 监听工具条事件
+        table.on('tool(menu-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            switch(layEvent) {
+                // 添加子项
+                case 'addChild':
+                    var title = data.menuType === 1 ? '新增二级菜单' : '新增功能按钮';
+                    layer.open({
+                        type: 2,
+                        title: title,
+                        area: ['500px', '400px'],
+                        content: '../pages/admin/menu-add.html?parentId=' + data.menuId + '&type=' + (data.menuType + 1),
+                        end: function() {
+                            renderTable();
+                        }
+                    });
+                    break;
+                
+                // 编辑菜单
+                case 'edit':
+                    layer.open({
+                        type: 2,
+                        title: '编辑【' + data.menuName + '】',
+                        area: ['500px', '400px'],
+                        content: '../pages/admin/menu-edit.html?menuId=' + data.menuId,
+                        end: function() {
+                            renderTable();
+                        }
+                    });
+                    break;
+                
+                // 删除菜单
+                case 'del':
+                    layer.confirm('确定删除【' + data.menuName + '】？此操作将删除所有子菜单', {
+                        icon: 3,
+                        title: '删除确认'
+                    }, function(index) {
+                        layer.close(index);
+                        layer.msg('菜单删除成功', {icon: 1, time: 1000});
+                        renderTable();
+                    });
+                    break;
+            }
+        });
+    });
+</script>
+</body>
+</html>

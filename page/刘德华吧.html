@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>刘德华吧</title>
+		<!-- 引入Tailwind CSS框架 -->
+		<script src="https://cdn.tailwindcss.com"></script>
+		<!-- 引入Font Awesome图标库 -->
+		<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+		<!-- Tailwind自定义配置 - 扩展主题颜色和字体 -->
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							primary: '#3B82F6', // 主色调：蓝色（按钮、交互元素）
+							secondary: '#10B981', // 辅助色：绿色（点赞、成功）
+							accent: '#F59E0B', // 强调色：橙色（标识、热门）
+							dark: '#1F2937', // 深色（标题、文本）
+							light: '#F3F4F6' // 浅色（背景、边框）
+						},
+						fontFamily: {
+							sans: ['Inter', 'system-ui', 'sans-serif'],
+						},
+					}
+				}
+			}
+		</script>
+		<!-- 自定义Tailwind工具类 -->
+		<style type="text/tailwindcss">
+			@layer utilities {
+		        .content-auto {
+		            content-visibility: auto;
+		        }
+		        .card-hover {
+		            transition: all 0.3s ease;
+		        }
+		        .card-hover:hover {
+		            transform: translateY(-5px);
+		            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+		        }
+		        .reply-hover {
+		            transition: background-color 0.2s ease;
+		        }
+		        .reply-hover:hover {
+		            background-color: rgba(59, 130, 246, 0.03);
+		        }
+		        .topic-hover {
+		            transition: all 0.2s ease;
+		        }
+		        .topic-hover:hover {
+		            background-color: rgba(59, 130, 246, 0.1);
+		            color: #3B82F6;
+		            cursor: pointer;
+		        }
+		    }
+		</style>
+	</head>
+	<body class="bg-gray-50">
+		<!-- 顶部导航栏 -->
+		<header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+			<div class="container mx-auto px-4 py-3 flex items-center justify-between">
+				<div class="flex items-center space-x-2">
+					<a href="index.html" class="text-gray-500 hover:text-primary">
+						<i class="fa fa-arrow-left"></i>
+					</a>
+					<h1 class="text-lg font-bold text-dark">刘德华吧</h1>
+					<span class="bg-accent/10 text-accent text-xs px-2 py-0.5 rounded-full">官方认证</span>
+				</div>
+				<div class="flex items-center space-x-4">
+					<button class="text-gray-500 hover:text-primary transition-colors">
+						<i class="fa fa-search"></i>
+					</button>
+					<button
+						class="bg-primary text-white px-3 py-1.5 rounded-lg text-sm hover:bg-primary/90 transition-colors">
+						关注
+					</button>
+				</div>
+			</div>
+		</header>
+
+		<!-- 主内容区+右侧导航栏 布局容器 -->
+		<div class="container mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
+			<!-- 左侧：核心帖子内容区 -->
+			<main class="flex-grow max-w-3xl mx-auto lg:mx-0">
+				<!-- 内容区 - 核心帖子 -->
+				<section>
+					<!-- 帖子1：刘德华新电影消息 -->
+					<article class="bg-white rounded-xl shadow-sm overflow-hidden card-hover mb-6">
+						<div class="p-4">
+							<div class="flex items-start space-x-3">
+								<img src="https://picsum.photos/id/1005/40/40" alt="华仔影迷会头像"
+									class="w-10 h-10 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<div>
+											<h3 class="font-medium text-dark">华仔影迷会</h3>
+											<p class="text-xs text-gray-500">2小时前 · 刘德华吧</p>
+										</div>
+										<button class="text-gray-400 hover:text-gray-600 transition-colors">
+											<i class="fa fa-ellipsis-h"></i>
+										</button>
+									</div>
+
+									<div class="mt-3">
+										<h4 class="text-lg font-semibold text-dark mb-2">刘德华新电影《红毯先生》票房破亿！</h4>
+										<p class="text-gray-600 mb-3">
+											华仔最新主演的电影《红毯先生》上映三天票房已经突破1亿！这部电影讲述了一位过气影帝为了重返巅峰，与导演合作拍摄农村题材影片的故事，华仔在片中的表演获得了影评人和观众的一致好评。
+										</p>
+
+										<!-- 电影图片组 -->
+										<div class="grid grid-cols-2 gap-1 mb-3">
+											<img src="https://picsum.photos/id/237/600/400" alt="红毯先生电影海报"
+												class="rounded-lg w-full h-40 object-cover">
+											<img src="https://picsum.photos/id/239/600/400" alt="刘德华电影剧照"
+												class="rounded-lg w-full h-40 object-cover">
+										</div>
+									</div>
+
+									<div
+										class="flex justify-between items-center text-sm text-gray-500 pt-2 border-t border-gray-100">
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-thumbs-o-up"></i>
+											<span>2568</span>
+										</button>
+										<a href="华仔影迷会.html"><button
+												class="flex items-center space-x-1 hover:text-primary transition-colors">
+												<i class="fa fa-comment-o"></i>
+												<span>328</span>
+											</button></a>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-star-o"></i>
+											<span>892</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-share-alt"></i>
+											<span>分享</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</article>
+
+					<!-- 帖子2：刘德华经典歌曲回顾 -->
+					<article class="bg-white rounded-xl shadow-sm overflow-hidden card-hover mb-6">
+						<div class="p-4">
+							<div class="flex items-start space-x-3">
+								<img src="https://picsum.photos/id/1012/40/40" alt="天王音乐库头像"
+									class="w-10 h-10 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<div>
+											<h3 class="font-medium text-dark">天王音乐库</h3>
+											<p class="text-xs text-gray-500">昨天 · 刘德华吧</p>
+										</div>
+										<button class="text-gray-400 hover:text-gray-600 transition-colors">
+											<i class="fa fa-ellipsis-h"></i>
+										</button>
+									</div>
+
+									<div class="mt-3">
+										<h4 class="text-lg font-semibold text-dark mb-2">刘德华十大经典歌曲，每首都是回忆杀！</h4>
+										<p class="text-gray-600 mb-3">作为华语乐坛的常青树，华仔的经典歌曲数不胜数，整理了我心中的十大金曲：</p>
+
+										<div class="bg-gray-50 p-3 rounded-lg mb-3">
+											<ol class="list-decimal list-inside space-y-2 text-gray-700">
+												<li>《忘情水》- 1994年，传唱度最高的歌曲之一</li>
+												<li>《中国人》- 1997年，振奋人心的爱国歌曲</li>
+												<li>《冰雨》- 1997年，经典情歌代表作</li>
+												<li>《练习》- 2002年，KTV必点曲目</li>
+												<li>《今天》- 1995年，励志歌曲</li>
+												<li>《笨小孩》- 1998年，讲述平凡人的奋斗</li>
+												<li>《男人哭吧不是罪》- 2000年，打破传统观念的歌曲</li>
+												<li>《世界第一等》- 1997年，闽南语经典</li>
+												<li>《爱你一万年》- 1999年，深情告白曲目</li>
+												<li>《无间道》- 2003年，电影同名主题曲</li>
+											</ol>
+										</div>
+
+										<p class="text-gray-600 mb-3">你们心中的排名是怎样的？欢迎补充讨论！</p>
+									</div>
+
+									<div
+										class="flex justify-between items-center text-sm text-gray-500 pt-2 border-t border-gray-100">
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-thumbs-o-up"></i>
+											<span>3892</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-comment-o"></i>
+											<span>567</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-star-o"></i>
+											<span>1254</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-share-alt"></i>
+											<span>分享</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</article>
+
+					<!-- 帖子3：刘德华公益事业 -->
+					<article class="bg-white rounded-xl shadow-sm overflow-hidden card-hover mb-6">
+						<div class="p-4">
+							<div class="flex items-start space-x-3">
+								<img src="https://picsum.photos/id/1025/40/40" alt="爱心传递者头像"
+									class="w-10 h-10 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<div>
+											<h3 class="font-medium text-dark">爱心传递者</h3>
+											<p class="text-xs text-gray-500">3天前 · 刘德华吧</p>
+										</div>
+										<button class="text-gray-400 hover:text-gray-600 transition-colors">
+											<i class="fa fa-ellipsis-h"></i>
+										</button>
+									</div>
+
+									<div class="mt-3">
+										<h4 class="text-lg font-semibold text-dark mb-2">刘德华默默做了20年的公益，值得我们尊敬！</h4>
+										<p class="text-gray-600 mb-3">很多人只知道华仔的演艺成就，却不知道他在公益事业上的贡献：</p>
+
+										<div class="mb-3">
+											<p class="text-gray-600 mb-2">1. 1991年华东水灾，刘德华捐款500万，并发起演艺界捐款活动</p>
+											<p class="text-gray-600 mb-2">2. 2008年汶川地震，捐款1000万，并参与重建工作</p>
+											<p class="text-gray-600 mb-2">3. 成立"刘德华慈善基金会"，帮助贫困儿童、老人和病患</p>
+											<p class="text-gray-600 mb-2">4. 多年来持续资助教育事业，建设多所希望小学</p>
+											<p class="text-gray-600 mb-2">5. 参与各种公益活动，呼吁关注艾滋病防治、环境保护等议题</p>
+										</div>
+
+										<div class="grid grid-cols-2 gap-1 mb-3">
+											<img src="https://picsum.photos/id/325/600/400" alt="刘德华公益活动照片"
+												class="rounded-lg w-full h-40 object-cover">
+											<img src="https://picsum.photos/id/328/600/400" alt="刘德华探访希望小学"
+												class="rounded-lg w-full h-40 object-cover">
+										</div>
+
+										<p class="text-gray-600 font-medium">真正的偶像，不仅有优秀的作品，更有高尚的品格！</p>
+									</div>
+
+									<div
+										class="flex justify-between items-center text-sm text-gray-500 pt-2 border-t border-gray-100">
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-thumbs-o-up"></i>
+											<span>4256</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-comment-o"></i>
+											<span>342</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-star-o"></i>
+											<span>1876</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-share-alt"></i>
+											<span>分享</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</article>
+					编辑新帖子</span>
+
+					<!-- 加载更多按钮 -->
+					<div class="text-center py-4">
+						<button
+							class="bg-white border border-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+							加载更多帖子
+						</button>
+					</div>
+				</section>
+			</main>
+
+			<!-- 右侧：导航栏（用户信息+发帖+热门话题） -->
+			<aside class="w-full lg:w-80 space-y-6">
+				<!-- 1. 用户信息与发帖区 -->
+				<div class="bg-white rounded-xl shadow-sm p-4 sticky top-20">
+					<!-- 用户头像区域 -->
+					<div class="flex flex-col items-center mb-4">
+						<img src="https://picsum.photos/id/1001/80/80" alt="当前用户头像"
+							class="w-16 h-16 rounded-full object-cover border-2 border-primary/20 mb-2">
+						<p class="font-medium text-dark">华仔的小迷弟</p>
+						<p class="text-xs text-gray-500">等级：3级 影迷</p>
+					</div>
+
+					<!-- 发布新帖按钮 -->
+					<a href="编辑帖子.html"><button id="postBtn"
+							class="w-full bg-primary text-white py-2.5 rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 mb-4">
+							<i class="fa fa-pencil"></i>
+							<span>编辑新帖子</span>
+						</button>
+					</a>
+<!-- 热门话题区域 -->
+<div class="mt-6">
+    <div class="flex items-center justify-between mb-3">
+        <h3 class="font-semibold text-dark text-sm">热门话题</h3>
+        <a href="#" class="text-primary text-xs hover:underline">更多</a>
+    </div>
+    <!-- 话题列表 -->
+    <div class="space-y-2">
+        <!-- 话题1：新电影相关 -->
+        <div class="flex items-center justify-between p-2 rounded-lg topic-hover">
+            <div class="flex items-center gap-2">
+                <span class="bg-accent/10 text-accent text-xs font-medium w-5 h-5 flex items-center justify-center rounded-full">1</span>
+                <span class="text-sm text-gray-700"># 红毯先生票房破3亿#</span>
+            </div>
+            <span class="text-xs text-gray-500">2.3万讨论</span>
+        </div>
+        <!-- 话题2：经典作品回顾 -->
+        <div class="flex items-center justify-between p-2 rounded-lg topic-hover">
+            <div class="flex items-center gap-2">
+                <span class="bg-accent/10 text-accent text-xs font-medium w-5 h-5 flex items-center justify-center rounded-full">2</span>
+                <span class="text-sm text-gray-700"># 刘德华90年代金曲盘点#</span>
+            </div>
+            <span class="text-xs text-gray-500">1.8万讨论</span>
+        </div>
+        <!-- 话题3：演唱会相关 -->
+        <div class="flex items-center justify-between p-2 rounded-lg topic-hover">
+            <div class="flex items-center gap-2">
+                <span class="bg-accent/10 text-accent text-xs font-medium w-5 h-5 flex items-center justify-center rounded-full">3</span>
+                <span class="text-sm text-gray-700"># 期待华仔新一轮巡演#</span>
+            </div>
+            <span class="text-xs text-gray-500">3.1万讨论</span>
+        </div>
+        <!-- 话题4：影视角色回忆 -->
+        <div class="flex items-center justify-between p-2 rounded-lg topic-hover">
+            <div class="flex items-center gap-2">
+                <span class="bg-gray-200 text-gray-600 text-xs font-medium w-5 h-5 flex items-center justify-center rounded-full">4</span>
+                <span class="text-sm text-gray-700"># 刘德华经典影视角色#</span>
+            </div>
+            <span class="text-xs text-gray-500">1.5万讨论</span>
+        </div>
+        <!-- 话题5：公益相关 -->
+        <div class="flex items-center justify-between p-2 rounded-lg topic-hover">
+            <div class="flex items-center gap-2">
+                <span class="bg-gray-200 text-gray-600 text-xs font-medium w-5 h-5 flex items-center justify-center rounded-full">5</span>
+                <span class="text-sm text-gray-700"># 刘德华公益故事合集#</span>
+            </div>
+            <span class="text-xs text-gray-500">9800讨论</span>
+        </div>
+    </div>
+</div>

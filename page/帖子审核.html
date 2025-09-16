@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>帖子审核界面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">帖子标题</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="title" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">作者</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="author" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-inline">
+                                <select name="status">
+                                    <option value="">全部</option>
+                                    <option value="待审核">待审核</option>
+                                    <option value="审核通过">审核通过</option>
+                                    <option value="审核不通过">审核不通过</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+       <script type="text/html" id="toolbarDemo">
+           <div class="layui-btn-container">
+              <button class="layui-btn layui-btn-sm layui-btn-normal data-delete-btn" lay-event="add">
+                   <i class="layui-icon layui-icon-add-1"></i> 添加帖子
+              </button>
+                 
+               <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete">
+                   <i class="layui-icon layui-icon-delete"></i> 批量删除
+               </button>
+           </div>
+       </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">审核不通过</a>
+            
+            <a class="layui-btn layui-btn-xs" lay-event="checkPass">审核通过</a><a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="back">返回</a>
+          
+        </script>
+
+    </div>
+</div>
+<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+        table.render({
+            elem: '#currentTableId',
+            url: '../api/帖子审核.json', // 假设接口返回帖子审核数据，需替换为实际接口
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [[
+                {type: "checkbox", width: 50},
+                {field: 'id', width: 80, title: 'ID', sort: true},
+                {field: 'title', width: 150, title: '标题'},
+                {field: 'content', title: '内容', minWidth: 200},
+                {field: 'author', width: 100, title: '作者'},
+                {field: 'module', width: 100, title: '所属模块'},
+                {field: 'category', width: 100, title: '所属分类'},
+                {field: 'publishTime', width: 160, title: '发布时间', sort: true},
+                {field: 'updateTime', width: 160, title: '更新时间', sort: true},
+                {field: 'status', width: 100, title: '状态', templet: function(d){
+                    return d.status === '待审核' ? '<span style="color:orange;">' + d.status + '</span>' : d.status;
+                }},
+                {title: '数据统计', width: 120, templet: function(d){
+                    return '浏览量: ' + d.viewCount + '<br>评论数: ' + d.commentCount + '<br>分享数: ' + d.shareCount;
+                }},
+                {title: '运营', width: 120, templet: function(d){
+                    return '是否置顶: ' + (d.isTop ? '是' : '否') + '<br>是否推荐: ' + (d.isRecommend ? '是' : '否');
+                }},
+                {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center"}
+            ]],
+            limits: [10, 15, 20, 25, 50, 100],
+            limit: 15,
+            page: true,
+            skin: 'line'
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var result = JSON.stringify(data.field);
+            layer.alert(result, {
+                title: '最终的搜索信息'
+            });
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    searchParams: result
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        /**
+         * toolbar监听事件
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加帖子操作
+                var index = layer.open({
+                    title: '添加帖子',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '../page/添加审核帖子.html', // 假设添加帖子的页面路径，需替换为实际路径
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            } else if (obj.event === 'delete') {  // 监听批量删除操作
+                var checkStatus = table.checkStatus('currentTableId')
+                    , data = checkStatus.data;
+                if (data.length === 0) {
+                    layer.msg('请选择要删除的帖子');
+                    return;
+                }
+                layer.confirm('确定删除选中的 ' + data.length + ' 条帖子吗？', function (index) {
+                    // 这里执行批量删除的逻辑，比如调用接口等
+                    layer.msg('删除成功');
+                    layer.close(index);
+                    // 重新加载表格数据
+                    table.reload('currentTableId');
+                });
+            }
+        });
+
+        // 监听表格工具事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') { // 编辑
+                var index = layer.open({
+                    title: '编辑帖子',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '#' + data.id, // 假设编辑帖子的页面路径，需替换为实际路径
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            } else if (obj.event === 'checkPass') { // 审核通过
+                layer.confirm('确定审核通过该帖子吗？', function (index) {
+                    // 这里执行审核通过的逻辑，比如调用接口等
+                    layer.msg('审核通过成功');
+                    layer.close(index);
+                    // 重新加载表格数据，模拟状态变更
+                    obj.update({
+                        status: '审核通过'
+                    });
+                });
+            } else if (obj.event === 'back') { // 返回
+                layer.prompt({title: '请输入返回原因', formType: 2}, function(text, index){
+                    layer.close(index);
+                    // 这里执行返回的逻辑，比如调用接口等，text为返回原因
+                    layer.msg('返回成功，原因：' + text);
+                    // 重新加载表格数据，模拟状态变更
+                    obj.update({
+                        status: '待审核'
+                    });
+                });
+            } else if (obj.event === 'delete') { // 删除
+                layer.confirm('真的删除该帖子吗？', function (index) {
+                    // 这里执行删除的逻辑，比如调用接口等
+                    obj.del();
+                    layer.close(index);
+                    layer.msg('删除成功');
+                });
+            }
+        });
+
+    });
+</script>
+
+</body>
+</html>

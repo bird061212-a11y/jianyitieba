@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>贴吧后台系统设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        .layui-form-item .layui-input-company {width: auto;padding-right: 10px;line-height: 38px;}
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <div class="layui-form layuimini-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">贴吧名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="tiebaName" lay-verify="required" lay-reqtext="贴吧名称不能为空" placeholder="请输入贴吧名称"  value="游戏攻略吧" class="layui-input">
+                    <tip>展示在贴吧顶部导航的核心名称。</tip>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">贴吧域名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="tiebaDomain" lay-verify="required" lay-reqtext="贴吧域名不能为空" placeholder="请输入贴吧域名"  value="http://gameguide.tieba.com" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">内容缓存时间</label>
+                <div class="layui-input-inline" style="width: 80px;">
+                    <input type="text" name="contentCache" lay-verify="number" value="5" class="layui-input">
+                </div>
+                <div class="layui-input-inline layui-input-company">分钟</div>
+                <div class="layui-form-mid layui-word-aux">本地测试建议0分钟，高访问量贴吧建议10-15分钟。</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">最大附件上传</label>
+                <div class="layui-input-inline" style="width: 80px;">
+                    <input type="text" name="maxFileSize" lay-verify="number" value="10240" class="layui-input">
+                </div>
+                <div class="layui-input-inline layui-input-company">KB</div>
+                <div class="layui-form-mid layui-word-aux">提示：图片附件建议不超过10MB，1 M = 1024 KB</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">允许上传类型</label>
+                <div class="layui-input-block">
+                    <input type="text" name="allowFileTypes" value="png|gif|jpg|jpeg|webp|mp4|zip|rar" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label required">贴吧首页标题</label>
+                <div class="layui-input-block">
+                    <textarea name="indexTitle" class="layui-textarea">游戏攻略吧 - 专注单机/手游攻略分享的交流社区</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">SEO关键词</label>
+                <div class="layui-input-block">
+                    <textarea name="seoKeywords" class="layui-textarea" placeholder="多个关键词用英文状态 , 号分割">游戏攻略,单机游戏攻略,手游攻略,BOSS打法,装备搭配</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">SEO描述</label>
+                <div class="layui-input-block">
+                    <textarea name="seoDescription" class="layui-textarea">游戏攻略吧提供全面的单机、手游攻略资源，涵盖新手教程、BOSS打法、装备搭配等内容，是玩家交流分享的优质社区。</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label required">底部版权信息</label>
+                <div class="layui-input-block">
+                    <textarea name="copyright" class="layui-textarea">© 2024 游戏攻略吧 版权所有 | 交流社区服务协议 | 隐私政策</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">发帖审核设置</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="postAudit" value="0" title="无需审核" checked>
+                    <input type="radio" name="postAudit" value="1" title="新用户需审核">
+                    <input type="radio" name="postAudit" value="2" title="全部需审核">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">敏感词过滤</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sensitiveFilter" value="1" title="启用" checked>
+                    <input type="radio" name="sensitiveFilter" value="0" title="禁用">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="tiebaSetting">确认保存</button>
+                    <button class="layui-btn layui-btn-primary" type="reset">重置表单</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form
+            , layer = layui.layer;
+
+        //监听提交
+        form.on('submit(tiebaSetting)', function (data) {
+            parent.layer.alert('贴吧系统设置保存成功！', {
+                title: '操作结果'
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

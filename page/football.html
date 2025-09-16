@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>足球分类吧</title>
+    <!-- 引入Tailwind CSS框架 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标库 -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    // 自定义颜色方案
+                    colors: {
+                        primary: '#3B82F6', // 主色调：蓝色（按钮、交互元素）
+                        secondary: '#10B981', // 辅助色：绿色（关注、热门标识）
+                        accent: '#F59E0B', // 强调色：橙色（分类标签）
+                        dark: '#1F2937', // 深色：标题、文本
+                        light: '#F3F4F6' // 浅色：背景、卡片边框
+                    },
+                    // 自定义字体
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- 自定义Tailwind工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto; /* 性能优化：自动控制内容可见性 */
+            }
+            .card-hover {
+                transition: all 0.3s ease; /* 卡片悬停过渡 */
+            }
+            .card-hover:hover {
+                transform: translateY(-3px); /* 悬停上移 */
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* 悬停增强阴影 */
+            }
+            .tag-hot {
+                background: linear-gradient(120deg, #FF6B6B, #F59E0B); /* 热门标签渐变 */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-dark">
+    <!-- 顶部搜索区（简化，仅保留核心搜索） -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-3">
+            <!-- 标题 + 移动端搜索切换 -->
+            <div class="flex items-center justify-between mb-3">
+                <h1 class="text-xl font-bold text-dark">足球分类吧</h1>
+                <button id="toggleMobileSearch" class="md:hidden text-gray-500 hover:text-primary">
+                    <i class="fa fa-search text-lg"></i>
+                </button>
+            </div>
+
+            <!-- 桌面端搜索框（中等屏幕以上显示） -->
+            <div class="hidden md:block relative mb-2">
+                <input type="text" placeholder="搜索你喜欢的吧"
+                    class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+
+            <!-- 移动端搜索框（默认隐藏，点击图标显示） -->
+            <div class="md:hidden relative hidden" id="mobileSearch">
+                <input type="text" placeholder="搜索明星吧..."
+                    class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 中心内容区：电影明星分类吧列表 -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 分类说明 -->
+        <div class="bg-white rounded-lg p-4 mb-6 border border-gray-100">
+            <p class="text-gray-600 text-sm">
+                <i class="fa fa-info-circle text-primary mr-1"></i>
+                按明星类型分类，点击进入对应贴吧，与同好交流明星动态、作品讨论
+            </p>
+        </div>
+
+        <!-- 1. 华语男星分类 -->
+        <section class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+               
+                <a href="#" class="text-xs text-primary hover:underline">查看全部 <i class="fa fa-angle-right ml-1"></i></a>
+            </div>
+
+            <!-- 明星吧卡片网格（适配移动端：1列→2列→3列→4列） -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- 明星吧1：刘德华吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <!-- 明星头像 -->
+                        <img src="../images/梅西.jpg" alt="梅西" class="w-14 h-14 rounded-lg object-cover">
+                        <!-- 明星吧信息 -->
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">梅西吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 128.5万</p>
+                            <p class="text-xs text-gray-500">帖子 362.8万</p>
+                        </div>
+                        <!-- 热门标签 -->
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+              
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="../images/C罗.jpg" alt="C罗" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">C罗吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 98.2万</p>
+                            <p class="text-xs text-gray-500">帖子 286.3万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 明星吧3：周杰伦吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="../images/范迪克.jpg" alt="范迪克" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">范迪克吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 156.7万</p>
+                            <p class="text-xs text-gray-500">帖子 421.5万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 明星吧4：沈腾吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="../images/萨拉赫.jpg" alt="萨拉赫" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">萨拉赫吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 85.3万</p>
+                            <p class="text-xs text-gray-500">帖子 198.6万</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+       
+        <section class="mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- 明星吧1：章子怡吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="../images/姆巴佩.jpg" alt="姆巴佩" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">姆巴佩吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 78.4万</p>
+                            <p class="text-xs text-gray-500">帖子 215.2万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 明星吧2：周迅吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="../images/蔡徐坤.jpg" alt="蔡徐坤" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">蔡徐坤吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 65.8万</p>
+                            <p class="text-xs text-gray-500">帖子 186.7万</p>
+                        </div>
+						<span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 明星吧3：杨幂吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="../images/马嘉祺.jpg" alt="马嘉祺" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">马嘉祺吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 132.6万</p>
+                            <p class="text-xs text-gray-500">帖子 398.4万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 明星吧4：赵丽颖吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1018/60/60" alt="陈立农" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">陈立农吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 145.3万</p>
+                            <p class="text-xs text-gray-500">帖子 452.1万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"> 
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1027/60/60" alt="贾斯汀·比伯" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">贾斯汀·比伯</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 92.5万</p>
+                            <p class="text-xs text-gray-500">帖子 268.3万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 明星吧2：斯嘉丽吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="../images/王源.jpg" alt="王源" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">王源吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 76.8万</p>
+                            <p class="text-xs text-gray-500">帖子 201.4万</p>
+                        </div>
+						 <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 明星吧3：汤姆·克鲁斯吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1029/60/60" alt="汤姆·克鲁斯" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">汤姆·克鲁斯吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 88.6万</p>
+                            <p class="text-xs text-gray-500">帖子 245.7万</p>
+                        </div>

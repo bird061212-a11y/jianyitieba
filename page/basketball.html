@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>篮球分类吧</title>
+    <!-- 引入Tailwind CSS框架 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标库 -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    // 篮球主题配色
+                    colors: {
+                        primary: '#17408B', // 篮球蓝（主色）
+                        secondary: '#FF6B00', // 篮球橙（热门/交互色）
+                        dark: '#1F2937', // 文本深色
+                        light: '#F3F4F6' // 背景浅色
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            }
+            .tag-hot {
+                background: linear-gradient(120deg, #FF6B00, #FF9F45);
+            }
+            .tag-official {
+                background-color: rgba(23, 64, 139, 0.1);
+                color: #17408B;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-dark">
+    <!-- 顶部搜索区 -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-3">
+            <!-- 标题 + 移动端搜索切换 -->
+            <div class="flex items-center justify-between mb-3">
+                <h1 class="text-xl font-bold text-dark flex items-center">
+                    <i class="fa fa-basketball-ball text-primary mr-2"></i>
+                    篮球分类吧
+                </h1>
+                <button id="toggleMobileSearch" class="md:hidden text-gray-500 hover:text-primary">
+                    <i class="fa fa-search text-lg"></i>
+                </button>
+            </div>
+
+            <!-- 桌面端搜索框 -->
+            <div class="hidden md:block relative mb-2">
+                <input type="text" placeholder="搜索篮球相关贴吧..."
+                    class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+
+            <!-- 移动端搜索框（默认隐藏） -->
+            <div class="md:hidden relative hidden" id="mobileSearch">
+                <input type="text" placeholder="搜索篮球吧..."
+                    class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 中心内容区：核心篮球主题吧（不细分，聚焦主要类别） -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 分类说明 -->
+        <div class="bg-white rounded-lg p-4 mb-6 border border-gray-100">
+            <p class="text-gray-600 text-sm">
+                <i class="fa fa-info-circle text-primary mr-1"></i>
+                篮球领域核心贴吧集合，点击进入与球友交流赛事、球星、装备等内容
+            </p>
+        </div>
+
+        <!-- 核心篮球吧列表（单分类展示，不细分NBA/CBA） -->
+        <section class="mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold flex items-center">
+                    <i class="fa fa-futbol-o text-secondary mr-2"></i>
+                    热门篮球主题吧
+                </h2>
+                <a href="#" class="text-xs text-primary hover:underline">查看全部 <i class="fa fa-angle-right ml-1"></i></a>
+            </div>
+
+            <!-- 贴吧卡片网格（响应式布局） -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- 1. 篮球吧（综合） -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1005/60/60" alt="篮球吧" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">篮球吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 386.2万</p>
+                            <p class="text-xs text-gray-500">帖子 954.7万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 2. NBA吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1012/60/60" alt="NBA吧" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">NBA吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 326.8万</p>
+                            <p class="text-xs text-gray-500">帖子 892.5万</p>
+                        </div>
+                        <span class="tag-official text-xs px-2 py-0.5 rounded-full border border-primary">官方</span>
+                    </div>
+                </a>
+
+                <!-- 3. CBA吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1025/60/60" alt="CBA吧" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">CBA吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 215.4万</p>
+                            <p class="text-xs text-gray-500">帖子 678.3万</p>
+                        </div>
+                        <span class="tag-official text-xs px-2 py-0.5 rounded-full border border-primary">官方</span>
+                    </div>
+                </a>
+
+                <!-- 4. 篮球装备吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1074/60/60" alt="篮球装备吧" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">篮球装备吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 158.6万</p>
+                            <p class="text-xs text-gray-500">帖子 421.9万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 5. 篮球教学吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1011/60/60" alt="篮球教学吧" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">篮球教学吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 124.3万</p>
+                            <p class="text-xs text-gray-500">帖子 356.8万</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 6. 男篮国家队吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1014/60/60" alt="男篮国家队吧" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">男篮国家队吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 98.7万</p>
+                            <p class="text-xs text-gray-500">帖子 289.5万</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 7. WNBA吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1015/60/60" alt="WNBA吧" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">WNBA吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 76.5万</p>
+                            <p class="text-xs text-gray-500">帖子 198.2万</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 8. 街头篮球吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1018/60/60" alt="街头篮球吧" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">街头篮球吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 112.8万</p>
+                            <p class="text-xs text-gray-500">帖子 312.6万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- 移动端搜索切换JS -->
+    <script>
+        const toggleMobileSearch = document.getElementById('toggleMobileSearch');
+        const mobileSearch = document.getElementById('mobileSearch');
+        
+        toggleMobileSearch.addEventListener('click', () => {
+            mobileSearch.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

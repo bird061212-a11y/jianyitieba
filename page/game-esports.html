@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赛事资讯中心</title>
+    <!-- 引入Tailwind CSS框架 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标库 -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#DC2626', 
+                        secondary: '#F97316', 
+                        accent: '#F59E0B', 
+                        dark: '#1F2937', 
+                        light: '#F3F4F6' 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            }
+            .tag-live {
+                background: linear-gradient(120deg, #DC2626, #F97316);
+            }
+            .tag-upcoming {
+                background: linear-gradient(120deg, #06B6D4, #2563EB);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-dark">
+    <!-- 顶部搜索区 -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between mb-3">
+                <h1 class="text-xl font-bold text-dark">赛事资讯中心</h1>
+                <button id="toggleMobileSearch" class="md:hidden text-gray-500 hover:text-primary">
+                    <i class="fa fa-search text-lg"></i>
+                </button>
+            </div>
+
+            <!-- 桌面端搜索框 -->
+            <div class="hidden md:block relative mb-2">
+                <input type="text" placeholder="搜索赛事直播/赛程结果/战队动态/选手专访"
+                    class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+
+            <!-- 移动端搜索框 -->
+            <div class="md:hidden relative hidden" id="mobileSearch">
+                <input type="text" placeholder="搜索赛事资讯..."
+                    class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 中心内容区 -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 板块说明 -->
+        <div class="bg-white rounded-lg p-4 mb-6 border border-gray-100">
+            <p class="text-gray-600 text-sm">
+                <i class="fa fa-info-circle text-primary mr-1"></i>
+                综合赛事资讯平台，提供全球赛事直播、实时比分、赛程安排、战队动态与深度战术分析
+            </p>
+        </div>
+
+        <!-- 赛事资讯内容列表（不做详细分类，仅展示热门） -->
+        <section class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-dark">热门赛事资讯</h2>
+                <a href="#" class="text-xs text-primary hover:underline">查看全部 <i class="fa fa-angle-right ml-1"></i></a>
+            </div>
+
+            <!-- 内容卡片网格 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- 赛事1 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1047/60/60" alt="实时赛事直播" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">赛事直播吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 568.5万</p>
+                            <p class="text-xs text-gray-500">观赛 1522.8万</p>
+                        </div>
+                        <span class="tag-live text-white text-xs px-2 py-0.5 rounded-full">直播中</span>
+                    </div>
+                </a>
+
+                <!-- 赛事2 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1059/60/60" alt="赛程与结果" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">赛程结果吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 518.2万</p>
+                            <p class="text-xs text-gray-500">数据 1386.3万</p>
+                        </div>
+                        <span class="tag-live text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 赛事3 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1062/60/60" alt="战队动态" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">战队动态吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 496.7万</p>
+                            <p class="text-xs text-gray-500">资讯 1291.5万</p>
+                        </div>
+                        <span class="tag-live text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 赛事4 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1074/60/60" alt="选手专访" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">选手专访吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 435.3万</p>
+                            <p class="text-xs text-gray-500">访谈 1088.6万</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 赛事5 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1082/60/60" alt="战术分析" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">战术分析吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 418.4万</p>
+                            <p class="text-xs text-gray-500">解析 975.2万</p>
+                        </div>
+                        <span class="tag-live text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 赛事6 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1054/60/60" alt=" upcoming赛事" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate"> upcoming赛事吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 405.8万</p>
+                            <p class="text-xs text-gray-500">预告 936.7万</p>
+                        </div>
+                        <span class="tag-upcoming text-white text-xs px-2 py-0.5 rounded-full">即将开始</span>
+                    </div>
+                </a>
+
+                <!-- 赛事7 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1069/60/60" alt="赛事奖金" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">奖金榜吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 382.6万</p>
+                            <p class="text-xs text-gray-500">排行 888.4万</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 赛事8 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1029/60/60" alt="历史回顾" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">经典回顾吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 375.3万</p>
+                            <p class="text-xs text-gray-500">集锦 852.1万</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 移动端搜索切换功能
+        document.getElementById('toggleMobileSearch').addEventListener('click', function() {
+            const mobileSearch = document.getElementById('mobileSearch');
+            mobileSearch.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
+    

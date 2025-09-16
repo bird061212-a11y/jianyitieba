@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乒乓球选手分类吧</title>
+    <!-- 引入Tailwind CSS框架 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标库 -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    // 保留原颜色方案不变
+                    colors: {
+                        primary: '#3B82F6', // 主色调：蓝色（按钮、交互元素）
+                        secondary: '#10B981', // 辅助色：绿色（关注、热门标识）
+                        accent: '#F59E0B', // 强调色：橙色（分类标签）
+                        dark: '#1F2937', // 深色：标题、文本
+                        light: '#F3F4F6' // 浅色：背景、卡片边框
+                    },
+                    // 保留原自定义字体
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- 自定义Tailwind工具类（保留原样） -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto; /* 性能优化：自动控制内容可见性 */
+            }
+            .card-hover {
+                transition: all 0.3s ease; /* 卡片悬停过渡 */
+            }
+            .card-hover:hover {
+                transform: translateY(-3px); /* 悬停上移 */
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* 悬停增强阴影 */
+            }
+            .tag-hot {
+                background: linear-gradient(120deg, #FF6B6B, #F59E0B); /* 热门标签渐变（保留原样） */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-dark">
+    <!-- 顶部搜索区（仅修改内容文本，结构不变） -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-3">
+            <!-- 标题 + 移动端搜索切换（修改标题文本） -->
+            <div class="flex items-center justify-between mb-3">
+                <h1 class="text-xl font-bold text-dark">乒乓球选手分类吧</h1>
+                <button id="toggleMobileSearch" class="md:hidden text-gray-500 hover:text-primary">
+                    <i class="fa fa-search text-lg"></i>
+                </button>
+            </div>
+
+            <!-- 桌面端搜索框（修改占位符文本） -->
+            <div class="hidden md:block relative mb-2">
+                <input type="text" placeholder="搜索你喜欢的乒乓球选手吧"
+                    class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+
+            <!-- 移动端搜索框（修改占位符文本） -->
+            <div class="md:hidden relative hidden" id="mobileSearch">
+                <input type="text" placeholder="搜索乒乓球选手吧..."
+                    class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 中心内容区：替换为乒乓球选手分类内容，结构不变 -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 分类说明（修改说明文本） -->
+        <div class="bg-white rounded-lg p-4 mb-6 border border-gray-100">
+            <p class="text-gray-600 text-sm">
+                <i class="fa fa-info-circle text-primary mr-1"></i>
+                按乒乓球选手类型分类，点击进入对应贴吧，与同好交流选手赛事动态、技术分析、比赛集锦
+            </p>
+        </div>
+
+        <!-- 1. 中国男子乒乓球选手分类（替换分类标题和内容） -->
+        <section class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                
+                <a href="#" class="text-xs text-primary hover:underline">查看全部 <i class="fa fa-angle-right ml-1"></i></a>
+            </div>
+
+            <!-- 选手吧卡片网格（替换为乒乓球选手信息） -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- 选手吧1：马龙吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <!-- 选手头像（保留图片链接，标注改为选手名） -->
+                        <img src="https://picsum.photos/id/1005/60/60" alt="马龙" class="w-14 h-14 rounded-lg object-cover">
+                        <!-- 选手吧信息 -->
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">马龙吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 218.5万</p>
+                            <p class="text-xs text-gray-500">帖子 562.8万</p>
+                        </div>
+                        <!-- 热门标签（保留样式） -->
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 选手吧2：樊振东吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1012/60/60" alt="樊振东" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">樊振东吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 198.2万</p>
+                            <p class="text-xs text-gray-500">帖子 486.3万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 选手吧3：王楚钦吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1025/60/60" alt="王楚钦" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">王楚钦吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 176.7万</p>
+                            <p class="text-xs text-gray-500">帖子 421.5万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 选手吧4：许昕吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1074/60/60" alt="许昕" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">许昕吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 155.3万</p>
+                            <p class="text-xs text-gray-500">帖子 398.6万</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 2. 中国女子乒乓球选手分类（替换分类标题和内容） -->
+        <section class="mb-8">
+           
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- 选手吧1：孙颖莎吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1011/60/60" alt="孙颖莎" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">孙颖莎吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 208.4万</p>
+                            <p class="text-xs text-gray-500">帖子 515.2万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 选手吧2：陈梦吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1014/60/60" alt="陈梦" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">陈梦吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 185.8万</p>
+                            <p class="text-xs text-gray-500">帖子 486.7万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 选手吧3：王曼昱吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1015/60/60" alt="王曼昱" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">王曼昱吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 162.6万</p>
+                            <p class="text-xs text-gray-500">帖子 398.4万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 选手吧4：王艺迪吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1018/60/60" alt="王艺迪" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">王艺迪吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 125.3万</p>
+                            <p class="text-xs text-gray-500">帖子 252.1万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 3. 国际乒乓球选手分类（替换分类标题和内容） -->
+        <section class="mb-8">
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"> 
+                <!-- 选手吧1：张本智和吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1027/60/60" alt="张本智和" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">张本智和吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 92.5万</p>
+                            <p class="text-xs text-gray-500">帖子 268.3万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 选手吧2：伊藤美诚吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1023/60/60" alt="伊藤美诚" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">伊藤美诚吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 76.8万</p>
+                            <p class="text-xs text-gray-500">帖子 201.4万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 选手吧3：雨果·卡尔德拉诺吧 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1029/60/60" alt="雨果·卡尔德拉诺" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">雨果·卡尔德拉诺吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">粉丝 88.6万</p>
+                            <p class="text-xs text

@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<!-- 视口设置，确保在移动设备上正确显示 -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-src/dist/css/layui.css">
+		<title>简易贴吧系统</title>
+		<!-- 引入Tailwind CSS框架 -->
+		<script src="https://cdn.tailwindcss.com"></script>
+		<!-- 引入Font Awesome图标库 -->
+		<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+		<!-- Tailwind自定义配置 - 扩展主题颜色和字体 -->
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						// 自定义颜色方案
+						colors: {
+							primary: '#3B82F6', // 主色调：蓝色，用于主要按钮和交互元素
+							secondary: '#10B981', // 辅助色：绿色，用于成功状态和关注按钮
+							accent: '#F59E0B', // 强调色：橙色，用于热门话题和重要标识
+							dark: '#1F2937', // 深色：用于标题和重要文本
+							light: '#F3F4F6' // 浅色：用于背景和次要元素
+						},
+						// 自定义字体
+						fontFamily: {
+							sans: ['Inter', 'system-ui', 'sans-serif'],
+						},
+					}
+				}
+			}
+		</script>
+		<script>
+		layui.use(['layer', 'util'], function() {
+		  var layer = layui.layer;
+		  var util = layui.util;
+      window.addEventListener('load', function() {
+         // 检查本地存储，避免重复弹窗（3天内只弹一次）
+         var popupExpire = localStorage.getItem('tiebaPopupExpire');
+         var now = new Date().getTime();
+         
+         if (!popupExpire || now > popupExpire) {
+           setTimeout(function() {
+             layer.open({
+               type: 1,
+               title: '<i class="layui-icon layui-icon-gift text-accent mr-2"></i>官方限时活动',
+               area: ['90%', 'auto'],
+               maxWidth: 500,
+               shadeClose: true, // 点击遮罩关闭
+               content: `
+                 <div class="p-0">
+                   <img src="https://picsum.photos/id/26/800/300" alt="活动海报" class="w-full h-40 object-cover">
+                   <div class="p-4">
+                     <h4 class="font-bold text-accent mb-2">贴吧年度盛典，豪礼送不停！</h4>
+                     <p class="text-sm text-gray-600 mb-3">发布带#年度总结#话题的帖子，即可获得抽奖机会，iPhone 15等你拿～</p>
+                     <div class="flex items-center text-xs text-gray-500 mb-3">
+                       <input type="checkbox" id="noShowAgain" class="layui-checkbox" lay-skin="primary">
+                       <label for="noShowAgain" class="ml-2">3天内不再显示</label>
+                     </div>
+                     <div class="flex justify-between">
+                       <button class="layui-btn layui-btn-primary" onclick="layer.closeAll()">关闭</button>
+                       <button class="layui-btn bg-secondary" onclick="layer.closeAll()">查看详情</button>
+                     </div>
+                   </div>
+                 </div>
+               `,
+               end: function() {
+                 // 若勾选"不再显示"，设置本地存储过期时间
+                 if (document.getElementById('noShowAgain').checked) {
+                   var expireTime = now + 3 * 24 * 60 * 60 * 1000; // 3天有效期
+                   localStorage.setItem('tiebaPopupExpire', expireTime);
+                 }
+               }
+             });
+           }, 2000); // 页面加载2秒后弹出
+         }
+       });
+     });</script>
+		<script>
+			// 定义全局变量保存菜单状态
+			function myFunction() {
+				document.getElementById("myDropdown").classList.toggle("show");
+			}
+		</script>
+		<!-- 自定义Tailwind工具类 -->
+		<style type="text/tailwindcss">
+			@layer utilities {
+            .content-auto {
+                content-visibility: auto; /* 自动内容可见性优化，提升性能 */
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 文本阴影效果 */
+            }
+           .card-hover {
+               transition: all 0.3s ease; /* 卡片悬停过渡效果 */
+           }
+            .card-hover:hover {
+                transform: translateY(-5px); /* 悬停时向上移动5px */
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* 悬停时增强阴影 */
+            }
+        }
+    </style>
+<script>
+// 清除弹出层存储状态，强制显示
+function resetPopup() {
+    localStorage.removeItem('tiebaEventPopupShown');
+    // 立即显示弹出层
+    const popup = document.getElementById('eventPopup');
+    const popupContent = document.getElementById('popupContent');
+    
+    popup.classList.remove('opacity-0', 'pointer-events-none');
+    popupContent.classList.remove('scale-95');
+    popupContent.classList.add('scale-100');
+}
+
+// 显示弹出层
+function showEventPopup() {
+    const popup = document.getElementById('eventPopup');
+    const popupContent = document.getElementById('popupContent');
+    
+    // 检查本地存储，判断是否需要显示
+    const popupShown = localStorage.getItem('tiebaEventPopupShown');
+    const now = new Date().getTime();
+    
+    // 如果没有记录或已过期（7天），则显示
+    if (!popupShown || now > parseInt(popupShown)) {
+        setTimeout(() => {
+            popup.classList.remove('opacity-0', 'pointer-events-none');
+            popupContent.classList.remove('scale-95');
+            popupContent.classList.add('scale-100');
+        }, 1000); // 页面加载1秒后显示
+    }
+}
+
+// 隐藏弹出层
+function hideEventPopup() {
+    const popup = document.getElementById('eventPopup');
+    const popupContent = document.getElementById('popupContent');
+    const dontShowAgain = document.getElementById('dontShowAgain');
+    
+    popup.classList.add('opacity-0', 'pointer-events-none');
+    popupContent.classList.remove('scale-100');
+    popupContent.classList.add('scale-95');
+    
+    // 如果勾选了不再显示，设置本地存储（7天有效期）
+    if (dontShowAgain.checked) {
+        const expireTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
+        localStorage.setItem('tiebaEventPopupShown', expireTime.toString());
+    }
+}
+
+// 页面加载完成后初始化
+window.addEventListener('load', function() {
+    // 显示弹出层
+    showEventPopup();
+    
+    // 绑定关闭事件
+    document.getElementById('closeEventPopup').addEventListener('click', hideEventPopup);
+    document.getElementById('cancelEventBtn').addEventListener('click', hideEventPopup);
+    
+    // 立即参与按钮事件
+    document.getElementById('joinEventBtn').addEventListener('click', function() {
+        // 跳转到发布帖子弹窗
+        hideEventPopup();
+        openModal(); // 打开发布帖子窗口
+    });
+    
+    // 点击弹出层外部关闭
+    document.getElementById('eventPopup').addEventListener('click', function(e) {
+        if (e.target === this) {
+            hideEventPopup();
+        }
+    });
+});
+</script>
+	</head>
+	<body class="bg-gray-100 font-sans">
+		<div id="eventPopup" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+		    <div class="bg-white rounded-2xl w-full max-w-lg mx-4 transform scale-95 transition-transform duration-300" id="popupContent">
+		        <!-- 弹出层头部 -->
+		        <div class="relative p-6 bg-primary">
+		            <h2 class="text-2xl font-bold text-white flex items-center">
+		                <i class="fa fa-bullhorn mr-2"></i>官方活动通知
+		            </h2>
+		            <button id="closeEventPopup" class="absolute top-3 right-3 w-8 h-8 bg-black/30 text-white rounded-full flex items-center justify-center hover:bg-black/50 transition-colors">
+		                <i class="fa fa-times"></i>
+		            </button>
+		        </div>
+		        
+		        <!-- 弹出层内容 -->
+		        <div class="p-6">
+		            <div class="flex items-center mb-4">
+		                <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mr-3">
+		                    <i class="fa fa-trophy text-accent text-xl"></i>
+		                </div>
+		                <h3 class="text-xl font-bold text-dark">贴吧年度创作大赛</h3>
+		            </div>
+		            
+		            <p class="text-gray-600 mb-5">分享你的年度精彩故事，参与话题#我的2023#赢取丰厚奖品！优质内容将获得官方推荐和流量扶持。</p>
+		            
+		            <div class="bg-gray-50 rounded-xl p-4 mb-5">
+		                <h4 class="font-medium text-dark mb-2 flex items-center">
+		                    <i class="fa fa-gift text-accent mr-2"></i>活动奖品
+		                </h4>
+		                <ul class="space-y-2 text-sm text-gray-600">
+		                    <li class="flex items-center">
+		                        <i class="fa fa-check-circle text-secondary mr-2"></i>
+		                        <span>一等奖：iPhone 15 Pro（1名）</span>
+		                    </li>
+		                    <li class="flex items-center">
+		                        <i class="fa fa-check-circle text-secondary mr-2"></i>
+		                        <span>二等奖：AirPods Pro（3名）</span>
+		                    </li>
+		                    <li class="flex items-center">
+		                        <i class="fa fa-check-circle text-secondary mr-2"></i>
+		                        <span>三等奖：贴吧年度会员（10名）</span>
+		                    </li>
+		                </ul>
+		            </div>
+		            
+		            <div class="flex items-center text-sm text-gray-500 mb-6">
+		                <input type="checkbox" id="dontShowAgain" class="w-4 h-4 text-primary rounded focus:ring-primary">
+		                <label for="dontShowAgain" class="ml-2">7天内不再显示</label>
+		            </div>
+		            
+		            <div class="flex space-x-3">
+		                <button id="cancelEventBtn" class="flex-1 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+		                    稍后再说
+		                </button>
+		                <button id="joinEventBtn" class="flex-1 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium">
+		                    立即参与
+		                </button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+			<div class="container mx-auto px-4">
+				<div class="flex justify-between items-center py-4">
+					<!-- 新增一个测试按钮，用于强制显示弹出层 -->
+					<button onclick="resetPopup()" class="px-3 py-1 text-sm bg-accent text-white rounded-full">
+						显示活动弹窗
+					</button>
+
+					<!-- 搜索框 - 仅在中等屏幕以上显示 -->
+					<div class="hidden md:block flex-grow max-w-md mx-8">
+						<div class="relative">
+							<input type="text" placeholder="搜索帖子、用户或贴吧..."
+								class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+							<button
+								class= "absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+								<i class="fa fa-search"></i>
+							</button>
+						</div>
+					</div>
+
+
+				</div>
+
+				<!-- 移动端搜索框 - 默认隐藏 -->
+				<div class="md:hidden pb-4 hidden" id="mobileSearch">
+					<div class="relative">
+						<input type="text" placeholder="搜索帖子、用户或贴吧..."
+							class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+						<button
+							class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+							<i class="fa fa-search"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		<!-- 主内容区 - 使用响应式布局，在不同屏幕尺寸下有不同排列方式 -->
+		<main class="container mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
+			<!-- 左侧边栏 - 分类导航，在移动端堆叠在顶部，大屏幕固定位置 -->
+					<!-- 创建新贴吧按钮 -->
+			<!-- 中间内容区 - 帖子列表，占据主要空间 -->
+			<section class="md:w-3/5 lg:w-3/6 flex-grow">
+				<!-- 发布帖子区域 -->
+				<div class="bg-white rounded-xl shadow-sm p-4 mb-6">
+					<div class="flex space-x-3">
+						<img src="https://picsum.photos/id/64/40/40" alt="用户头像"
+							class="w-10 h-10 rounded-full object-cover">
+						<div class="flex-grow">
+							<button id="createPostBtn"
+								class="w-full text-left px-4 py-3 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 transition-colors">
+								来说点什么吧...
+							</button>
+							<div class="flex justify-between mt-3">
+								<div class="flex space-x-4">
+									<button
+										class="flex items-center text-gray-500 hover:text-primary transition-colors">
+										<i class="fa fa-image mr-1"></i>
+										<span class="text-sm">图片</span>
+									</button>
+									<button
+										class="flex items-center text-gray-500 hover:text-primary transition-colors">
+										<i class="fa fa-smile-o mr-1"></i>
+										<span class="text-sm">表情</span>
+									</button>
+									<button
+										class="flex items-center text-gray-500 hover:text-primary transition-colors">
+										<i class="fa fa-at mr-1"></i>
+										<span class="text-sm">@好友</span>
+									</button>
+								</div>
+								<button class="text-gray-500 hover:text-primary transition-colors">
+									<i class="fa fa-ellipsis-h"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 帖子排序选项 -->
+				<div class="bg-white rounded-xl shadow-sm p-3 mb-6">
+					<div class="flex items-center justify-between">
+						<h2 class="font-bold text-dark">热门帖子</h2>
+						<div class="flex space-x-1">
+							<button class="px-3 py-1 text-sm bg-primary text-white rounded-full">最新</button>
+							<button
+								class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">最热</button>
+							<button
+								class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">推荐</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- 帖子列表 -->
+				<div class="space-y-6">
+					<!-- 帖子1 -->
+					<article class="bg-white rounded-xl shadow-sm overflow-hidden card-hover">
+						<div class="p-4">
+							<div class="flex items-start space-x-3">
+								<img src="https://picsum.photos/id/237/40/40" alt="作者头像"
+									class="w-10 h-10 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<div>
+											<h3 class="font-medium text-dark">猫咪爱好者</h3>
+											<p class="text-xs text-gray-500">2小时前 · 萌宠吧</p>
+										</div>
+										<button class="text-gray-400 hover:text-gray-600 transition-colors">
+											<i class="fa fa-ellipsis-h"></i>
+										</button>
+									</div>
+
+									<div class="mt-3">
+										<h4 class="text-lg font-semibold text-dark mb-2">我家猫咪今天特别乖，分享几张照片~</h4>
+										<p class="text-gray-600 mb-3">今天给它买了新玩具，玩了一整天，现在终于安静下来了，看着它睡觉的样子太治愈了！</p>
+
+										<!-- 图片组 - 使用网格布局展示多张图片 -->
+										<div class="grid grid-cols-3 gap-1 mb-3">
+											<img src="https://picsum.photos/id/40/300/300" alt="猫咪照片1"
+												class="rounded-lg w-full h-24 object-cover">
+											<img src="https://picsum.photos/id/41/300/300" alt="猫咪照片2"
+												class="rounded-lg w-full h-24 object-cover">
+											<img src="https://picsum.photos/id/42/300/300" alt="猫咪照片3"
+												class="rounded-lg w-full h-24 object-cover">
+										</div>
+									</div>
+
+									<!-- 互动数据：点赞、评论、收藏、分享 -->
+									<div
+										class="flex justify-between items-center text-sm text-gray-500 pt-2 border-t border-gray-100">
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors post-like">
+											<i class="fa fa-thumbs-o-up"></i>
+											<span>128</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-comment-o"></i>
+											<span>32</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-star-o"></i>
+											<span>45</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-share-alt"></i>
+											<span>分享</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 精选回复区域 -->
+						<div class="bg-gray-50 p-4 border-t border-gray-100">
+							<h5 class="font-medium text-dark mb-3">精选回复</h5>
+							<div class="space-y-3">
+								<div class="flex space-x-2">
+									<img src="https://picsum.photos/id/91/40/40" alt="回复者头像"
+										class="w-8 h-8 rounded-full object-cover">
+									<div class="bg-white p-3 rounded-lg flex-grow">
+										<div class="flex items-center mb-1">
+											<span class="text-sm font-medium text-dark">狗狗守护者</span>
+											<span class="ml-2 text-xs text-gray-500">1小时前</span>
+										</div>
+										<p class="text-sm text-gray-600">好可爱的猫咪啊！请问是什么品种呢？看起来好温顺。</p>
+										<div class="flex items-center mt-2 text-xs text-gray-500">
+											<button class="hover:text-primary transition-colors">回复</button>
+											<span class="mx-2">·</span>
+											<button class="hover:text-primary transition-colors" >点赞 (15)</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- 查看更多回复按钮 -->
+							<a href="猫咪爱好者.html"><button
+								class="w-full mt-3 py-2 text-center text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors"  >
+								查看全部回复</a>
+							</button>
+						</div>
+					</article>
+
+					<!-- 帖子2 -->
+					<article class="bg-white rounded-xl shadow-sm overflow-hidden card-hover">
+						<div class="p-4">
+							<div class="flex items-start space-x-3">
+								<img src="https://picsum.photos/id/177/40/40" alt="作者头像"
+									class="w-10 h-10 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<div>
+											<h3 class="font-medium text-dark">编程学习者</h3>
+											<p class="text-xs text-gray-500">昨天 · 编程吧</p>
+										</div>
+										<button class="text-gray-400 hover:text-gray-600 transition-colors">
+											<i class="fa fa-ellipsis-h"></i>
+										</button>
+									</div>
+
+									<div class="mt-3">
+										<h4 class="text-lg font-semibold text-dark mb-2">初学者学习HTML/CSS的一些小技巧</h4>
+										<p class="text-gray-600 mb-3">作为一个曾经的初学者，想分享一些学习前端的小技巧，希望对大家有帮助：<br>
+											1. 多写多练，不要只看教程<br>
+											2. 学会使用浏览器开发者工具<br>
+											3. 从简单项目开始做起<br>
+											4. 多看优秀代码...</p>
+									</div>
+
+									<!-- 互动数据 -->
+									<div
+										class="flex justify-between items-center text-sm text-gray-500 pt-2 border-t border-gray-100">
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors post-like">
+											<i class="fa fa-thumbs-o-up"></i>
+											<span>256</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-comment-o"></i>
+											<span>64</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-star-o"></i>
+											<span>98</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-share-alt"></i>
+											<span>分享</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 精选回复 -->
+						<div class="bg-gray-50 p-4 border-t border-gray-100">
+							<a href="编程学习者.html"><button
+								class="w-full mt-3 py-2 text-center text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors">
+								查看全部64条回复</a>
+							</button>
+						</div>
+					</article>
+
+					<!-- 帖子3 -->
+					<article class="bg-white rounded-xl shadow-sm overflow-hidden card-hover">
+						<div class="p-4">
+							<div class="flex items-start space-x-3">
+								<img src="https://picsum.photos/id/342/40/40" alt="作者头像"
+									class="w-10 h-10 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<div>
+											<h3 class="font-medium text-dark">旅行爱好者</h3>
+											<p class="text-xs text-gray-500">3天前 · 旅行吧</p>
+										</div>
+										<button class="text-gray-400 hover:text-gray-600 transition-colors">
+											<i class="fa fa-ellipsis-h"></i>
+										</button>
+									</div>
+
+									<div class="mt-3">
+										<h4 class="text-lg font-semibold text-dark mb-2">分享我在云南的旅行经历，太美了！</h4>
+										<p class="text-gray-600 mb-3">上周去了云南，香格里拉的风景真的名不虚传，随手一拍都是壁纸，推荐给大家！</p>
+
+										<!-- 图片组 -->
+										<div class="grid grid-cols-2 gap-1 mb-3">
+											<img src="https://picsum.photos/id/10/600/400" alt="云南风景1"
+												class="rounded-lg w-full h-40 object-cover">
+											<img src="https://picsum.photos/id/15/600/400" alt="云南风景2"
+												class="rounded-lg w-full h-40 object-cover">
+										</div>
+									</div>
+
+									<!-- 互动数据 -->
+									<div
+										class="flex justify-between items-center text-sm text-gray-500 pt-2 border-t border-gray-100">
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors post-like">
+											<i class="fa fa-thumbs-o-up"></i>
+											<span>512</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-comment-o"></i>
+											<span>128</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-star-o"></i>
+											<span>203</span>
+										</button>
+										<button
+											class="flex items-center space-x-1 hover:text-primary transition-colors">
+											<i class="fa fa-share-alt"></i>
+											<span>分享</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 精选回复 -->
+						<div class="bg-gray-50 p-4 border-t border-gray-100">
+							<a href="旅行爱好者.html"><button
+								class="w-full mt-3 py-2 text-center text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors">
+								查看全部128条回复
+							</button></a>
+						</div>
+					</article>
+
+					<!-- 加载更多按钮 -->
+					<div class="text-center py-4">
+						<button id="loadMoreBtn"
+							class="px-6 py-2 bg-white text-primary border border-primary rounded-full hover:bg-primary/5 transition-colors font-medium">
+							加载更多
+							<i class="fa fa-refresh ml-1"></i>
+						</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- 右侧边栏 - 热门话题和推荐关注，仅在中等屏幕以上显示 -->
+			<aside class="md:w-1/5 lg:w-2/6">
+				<!-- 热门话题 -->
+				<div class="bg-white rounded-xl shadow-sm p-4 mb-6">
+					<h2 class="text-lg font-bold text-dark mb-4 flex items-center">
+						<i class="fa fa-line-chart text-accent mr-2"></i>热门话题
+					</h2>
+					<div class="space-y-3">
+						<div class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
+							<span
+								class="w-6 h-6 flex items-center justify-center bg-accent text-white rounded-full text-sm font-bold mr-3">1</span>
+							<span class="text-gray-800"># 2023年最值得期待的电影 #</span>
+							<span class="ml-auto text-xs text-gray-500">3.2万讨论</span>
+						</div>
+						<div class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
+							<span
+								class="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-700 rounded-full text-sm font-bold mr-3">2</span>
+							<span class="text-gray-800"># 程序员的日常 #</span>
+							<span class="ml-auto text-xs text-gray-500">2.8万讨论</span>
+						</div>
+						<div class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
+							<span
+								class="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-700 rounded-full text-sm font-bold mr-3">3</span>
+							<span class="text-gray-800"># 减肥成功的秘诀 #</span>
+							<span class="ml-auto text-xs text-gray-500">1.9万讨论</span>
+						</div>
+						<div class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
+							<span
+								class="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-700 rounded-full text-sm font-bold mr-3">4</span>
+							<span class="text-gray-800"># 学生党必备好物 #</span>
+							<span class="ml-auto text-xs text-gray-500">1.5万讨论</span>
+						</div>
+						<div class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
+							<span
+								class="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-700 rounded-full text-sm font-bold mr-3">5</span>
+							<span class="text-gray-800"># 在家也能做的美食 #</span>
+							<span class="ml-auto text-xs text-gray-500">1.2万讨论</span>
+						</div>
+					</div>
+					<button
+						class="w-full mt-4 py-2 text-center text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors">
+						查看更多
+					</button>
+				</div>
+
+				<!-- 推荐关注 -->
+				<div class="bg-white rounded-xl shadow-sm p-4">
+					<h2 class="text-lg font-bold text-dark mb-4 flex items-center">
+						<i class="fa fa-user-plus text-secondary mr-2"></i>推荐关注
+					</h2>
+					<div class="space-y-4">
+						<div class="flex items-center justify-between">
+							<div class="flex items-center space-x-3">
+								<img src="https://picsum.photos/id/22/40/40" alt="推荐用户1"
+									class="w-10 h-10 rounded-full object-cover">
+								<div>
+									<h3 class="font-medium text-dark">摄影达人</h3>
+									<p class="text-xs text-gray-500">分享精彩瞬间 · 1.2万粉丝</p>
+								</div>
+							</div>
+							<button
+								class="px-3 py-1 text-sm bg-secondary text-white rounded-full hover:bg-secondary/90 transition-colors">
+								关注
+							</button>
+						</div>
+						<div class="flex items-center justify-between">
+							<div class="flex items-center space-x-3">
+								<img src="https://picsum.photos/id/29/40/40" alt="推荐用户2"
+									class="w-10 h-10 rounded-full object-cover">
+								<div>
+									<h3 class="font-medium text-dark">健身教练</h3>
+									<p class="text-xs text-gray-500">专业健身指导 · 8.5千粉丝</p>
+								</div>
+							</div>
+							<button
+								class="px-3 py-1 text-sm bg-secondary text-white rounded-full hover:bg-secondary/90 transition-colors">
+								关注
+							</button>
+						</div>
+						<div class="flex items-center justify-between">
+							<div class="flex items-center space-x-3">
+								<img src="https://picsum.photos/id/65/40/40" alt="推荐用户3"
+									class="w-10 h-10 rounded-full object-cover">
+								<div>
+									<h3 class="font-medium text-dark">美食博主</h3>
+									<p class="text-xs text-gray-500">分享美食教程 · 2.3万粉丝</p>
+								</div>
+							</div>
+							<button
+								class="px-3 py-1 text-sm bg-secondary text-white rounded-full hover:bg-secondary/90 transition-colors">
+								关注
+							</button>
+						</div>
+					</div>
+					<button
+						class="w-full mt-4 py-2 text-center text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors">
+						更多推荐
+					</button>
+				</div>
+			</aside>
+		</main>
+
+		<!-- 发布帖子弹窗 - 默认隐藏，点击发布按钮时显示 -->
+		<div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden" id="postModal">
+			<div class="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+				<!-- 弹窗头部 -->
+				<div class="p-4 border-b border-gray-200 flex items-center justify-between">
+					<h3 class="text-lg font-bold text-dark">发布新帖子</h3>
+					<button id="closeModalBtn" class="text-gray-500 hover:text-gray-700 transition-colors">
+						<i class="fa fa-times text-xl"></i>
+					</button>
+				</div>
+
+				<!-- 弹窗内容 - 可滚动区域 -->
+				<div class="p-4 flex-grow overflow-y-auto">
+					<div class="mb-4">
+						<select class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+                            <option value="">选择贴吧分类</option>
+                            <option value="1">萌宠吧</option>
+                            <option value="2">编程吧</option>
+                            <option value="3">旅行吧</option>
+                            <option value="4">美食吧</option>
+                            <option value="5">摄影吧</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <input type="text" placeholder="请输入帖子标题（最多50字）"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                            maxlength="50">
+                    </div>
+                    <div class="mb-4">
+                        <textarea placeholder="请输入帖子内容（最多500字）"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none min-h-[200px]"
+                            maxlength="500"></textarea>
+                        <div class="text-right mt-1 text-xs text-gray-500">0/500</div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex items-center space-x-4 mb-2">
+                            <button class="flex items-center text-gray-600 hover:text-primary transition-colors">
+                                <i class="fa fa-image mr-1"></i>
+                                <span class="text-sm">添加图片</span>
+                            </button>
+                            <button class="flex items-center text-gray-600 hover:text-primary transition-colors">
+                                <i class="fa fa-smile-o mr-1"></i>
+                                <span class="text-sm">添加表情</span>
+                            </button>
+                            <button class="flex items-center text-gray-600 hover:text-primary transition-colors">
+                                <i class="fa fa-at mr-1"></i>
+                                <span class="text-sm">@好友</span>
+                            </button>
+                        </div>
+                        <!-- 已选图片预览区 -->
+                        <div class="grid grid-cols-4 gap-2 mt-2 hidden" id="imagePreview">
+                            <!-- 图片预览项将通过JS动态添加 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 弹窗底部 -->
+                <div class="p-4 border-t border-gray-200 flex justify-end">
+                    <button id="cancelPostBtn"
+                        class="px-4 py-2 mr-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                        取消
+                    </button>
+                    <button
+                        class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                        发布帖子
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 移动端导航栏 - 仅在移动端显示 -->
+        <footer class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40">
+            <div class="flex justify-around items-center py-3">
+                <button class="flex flex-col items-center text-primary">
+                    <i class="fa fa-home text-lg"></i>
+                    <span class="text-xs mt-1">首页</span>
+                </button>
+                <button class="flex flex-col items-center text-gray-500 hover:text-primary transition-colors">
+                    <i class="fa fa-compass text-lg"></i>
+                    <span class="text-xs mt-1">发现</span>
+                </button>
+                <button id="mobileCreatePostBtn"
+                    class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center -mt-5 shadow-lg">
+                    <i class="fa fa-plus text-xl"></i>
+                </button>
+                <button class="flex flex-col items-center text-gray-500 hover:text-primary transition-colors">
+                    <i class="fa fa-bell text-lg"></i>
+                    <span class="text-xs mt-1">通知</span>
+                </button>
+                <button class="flex flex-col items-center text-gray-500 hover:text-primary transition-colors">
+                    <i class="fa fa-user text-lg"></i>
+                    <span class="text-xs mt-1">我的</span>
+                </button>
+            </div>
+        </footer>
+
+        <!-- 顶部导航栏补充 - 移动端搜索按钮 -->
+        <div class="container mx-auto px-4 md:hidden flex justify-between items-center py-4">
+            <h1 class="text-xl font-bold text-dark text-shadow">简易贴吧</h1>
+            <button id="mobileSearchBtn" class="text-gray-500 hover:text-primary transition-colors">
+                <i class="fa fa-search text-xl"></i>
+            </button>
+        </div>
+
+        <!-- JavaScript 功能实现 -->
+        <script>
+            // 1. 发布帖子弹窗控制
+            const createPostBtn = document.getElementById('createPostBtn');
+            const mobileCreatePostBtn = document.getElementById('mobileCreatePostBtn');
+            const postModal = document.getElementById('postModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const cancelPostBtn = document.getElementById('cancelPostBtn');
+
+            // 打开弹窗
+            function openModal() {
+                postModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // 禁止背景滚动
+            }
+
+            // 关闭弹窗
+            function closeModal() {
+                postModal.classList.add('hidden');
+                document.body.style.overflow = ''; // 恢复背景滚动
+            }
+
+            createPostBtn.addEventListener('click', openModal);
+            mobileCreatePostBtn.addEventListener('click', openModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelPostBtn.addEventListener('click', closeModal);
+
+            // 点击弹窗外部关闭弹窗
+            postModal.addEventListener('click', function (e) {
+                if (e.target === postModal) {
+                    closeModal();
+                }
+            });
+
+            // 2. 移动端搜索框控制
+            const mobileSearchBtn = document.getElementById('mobileSearchBtn');
+            const mobileSearch = document.getElementById('mobileSearch');
+
+            mobileSearchBtn.addEventListener('click', function () {
+                mobileSearch.classList.toggle('hidden');
+                if (!mobileSearch.classList.contains('hidden')) {
+                    mobileSearch.querySelector('input').focus();
+                }
+            });
+
+            // 3. 帖子点赞功能
+            const likeButtons = document.querySelectorAll('.post-like');
+            likeButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const icon = this.querySelector('i');
+                    const count = this.querySelector('span');
+                    const currentCount = parseInt(count.textContent);
+
+                    if (icon.classList.contains('fa-thumbs-o-up')) {
+                        icon.classList.replace('fa-thumbs-o-up', 'fa-thumbs-up');
+                        this.classList.add('text-secondary');
+                        count.textContent = currentCount + 1;
+                    } else {
+                        icon.classList.replace('fa-thumbs-up', 'fa-thumbs-o-up');
+                        this.classList.remove('text-secondary');
+                        count.textContent = currentCount - 1;
+                    }
+                });
+            });
+
+            // 4. 加载更多帖子功能
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            loadMoreBtn.addEventListener('click', function () {
+                const btnIcon = this.querySelector('i');
+                btnIcon.classList.add('fa-spin');
+                this.disabled = true;
+
+                // 模拟加载延迟
+                setTimeout(() => {
+                    btnIcon.classList.remove('fa-spin');
+                    this.disabled = false;
+                    alert('已加载全部帖子');
+                }, 1000);
+            });
+        </script>
+    

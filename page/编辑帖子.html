@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>后台管理-添加审核帖子</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+		<!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+		<style>
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: #f2f3f5;
+				padding: 15px;
+				box-sizing: border-box;
+			}
+
+			.layui-card {
+				margin-bottom: 15px;
+			}
+
+			.layui-form-item {
+				margin-bottom: 15px;
+				clear: both;
+				/* 确保每个表单项独立成行 */
+			}
+
+			.form-container {
+				background-color: #fff;
+				padding: 20px;
+				border-radius: 4px;
+				box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+			}
+
+			.title-bar {
+				margin-bottom: 20px;
+				padding-bottom: 10px;
+				border-bottom: 1px solid #e6e6e6;
+			}
+
+			.title-bar h2 {
+				font-size: 18px;
+				color: #333;
+				display: inline-block;
+				margin: 0;
+			}
+
+			.operation-bar {
+				margin-top: 20px;
+				text-align: right;
+				clear: both;
+				/* 与上方表单项分隔 */
+			}
+
+			.layui-textarea {
+				min-height: 200px;
+			}
+
+			/* 隐藏原生文件输入框 */
+			#fileInput {
+				display: none;
+			}
+
+			/* 上传按钮样式优化（适配表单比例） */
+			#uploadBtn {
+				padding: 0 15px;
+				height: 38px;
+				line-height: 38px;
+				font-size: 14px;
+			}
+
+			/* 上传提示文本样式 */
+			.file-tip {
+				margin-top: 8px;
+				color: #666;
+				font-size: 12px;
+			}
+
+			/* 上传状态样式补充 */
+			.upload-progress {
+				color: #333;
+				margin-top: 8px;
+				font-size: 12px;
+			}
+			.success {
+				color: #009688;
+				margin-top: 8px;
+				font-size: 12px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="title-bar">
+			<h2>编辑帖子</h2>
+		</div>
+
+		<div class="form-container">
+			<form class="layui-form" action="" lay-filter="postForm">
+				<!-- 帖子标题 -->
+				<div class="layui-form-item">
+					<label class="layui-form-label">帖子标题</label>
+					<div class="layui-input-block">
+						<input type="text" name="title" lay-verify="required" placeholder="请输入帖子标题" autocomplete="off"
+							class="layui-input">
+					</div>
+				</div>
+
+				<!-- 所属模块 -->
+				<div class="layui-form-item">
+					<label class="layui-form-label">所属模块</label>
+					<div class="layui-input-block">
+						<select name="module" lay-verify="required">
+							<option value="">请选择模块</option>
+							<!-- 模块数据取自JSON menuInfo > 贴吧运营 > 板块管理 一级分类 -->
+							<option value="娱乐明星">娱乐明星</option>
+							<option value="体育赛事">体育赛事</option>
+							<option value="小说文学">小说文学</option>
+							<option value="生活分享">生活分享</option>
+							<option value="兴趣爱好">兴趣爱好</option>
+							<option value="游戏专区">游戏专区</option>
+							<option value="地区板块">地区板块</option>
+						</select>
+					</div>
+				</div>
+
+				<!-- 所属分类 -->
+				<div class="layui-form-item">
+					<label class="layui-form-label">所属分类</label>
+					<div class="layui-input-block">
+						<select name="category" lay-verify="required">
+							<option value="">请选择分类</option>
+							<!-- 分类数据取自JSON 各模块下二级子分类，按模块聚合展示 -->
+							<!-- 娱乐明星模块分类 -->
+							<option value="电影明星">娱乐明星-电影明星</option>
+							<option value="歌手">娱乐明星-歌手</option>
+							<!-- 体育赛事模块分类 -->
+							<option value="足球">体育赛事-足球</option>
+							<option value="篮球">体育赛事-篮球</option>
+							<option value="乒乓球">体育赛事-乒乓球</option>
+							<!-- 小说文学模块分类 -->
+							<option value="玄幻小说">小说文学-玄幻小说</option>
+							<option value="都市小说">小说文学-都市小说</option>
+							<option value="历史小说">小说文学-历史小说</option>
+							<option value="科幻小说">小说文学-科幻小说</option>
+							<option value="言情小说">小说文学-言情小说</option>
+							<!-- 生活分享模块分类 -->
+							<option value="美食烹饪">生活分享-美食烹饪</option>
+							<option value="家居装饰">生活分享-家居装饰</option>
+							<option value="手工制作">生活分享-手工制作</option>
+							<option value="园艺绿植">生活分享-园艺绿植</option>
+							<option value="生活妙招">生活分享-生活妙招</option>
+							<!-- 兴趣爱好模块分类 -->
+							<option value="摄影分享">兴趣爱好-摄影分享</option>
+							<option value="宠物趣事">兴趣爱好-宠物趣事</option>
+							<option value="旅行见闻">兴趣爱好-旅行见闻</option>
+							<option value="棋类游戏">兴趣爱好-棋类游戏</option>
+							<option value="书法绘画">兴趣爱好-书法绘画</option>
+							<!-- 游戏专区模块分类 -->
+							<option value="角色扮演（RPG）">游戏专区-角色扮演（RPG）</option>
+							<option value="多人竞技（MOBA）">游戏专区-多人竞技（MOBA）</option>
+							<option value="生存沙盒">游戏专区-生存沙盒</option>
+							<option value="单机大作">游戏专区-单机大作</option>
+							<option value="手游推荐">游戏专区-手游推荐</option>
+							<option value="游戏攻略">游戏专区-游戏攻略</option>
+							<option value="赛事资讯">游戏专区-赛事资讯</option>
+							<!-- 地区板块模块分类 -->
+							<option value="华北地区">地区板块-华北地区</option>
+							<option value="华中地区">地区板块-华中地区</option>
+							<option value="华东地区">地区板块-华东地区</option>
+							<option value="东北地区">地区板块-东北地区</option>
+							<option value="华南地区">地区板块-华南地区</option>
+							<option value="西南地区">地区板块-西南地区</option>
+							<option value="西北地区">地区板块-西北地区</option>
+						</select>
+					</div>
+				</div>
+
+				<!-- 上传附件（与其他表单项结构一致） -->
+				<div class="layui-form-item">
+					<label class="layui-form-label">上传附件</label>
+					<div class="layui-input-block">
+						<div class="layui-btn-group">
+							<!-- 隐藏原生文件输入框 -->
+							<input type="file" id="fileInput" accept=".jpg,.png,.jpeg,.txt,.pdf" />
+							<!-- 样式协调的上传按钮 -->
+							<button type="button" class="layui-btn layui-btn-primary" id="uploadBtn">
+								<i class="layui-icon layui-icon-upload mr-1"></i>上传文件跟图片
+							</button>
+						</div>
+						<!-- 上传提示/状态文本容器 -->
+						<div id="uploadInf" class="file-tip">支持jpg、png、txt、pdf格式，最大20MB</div>
+					</div>
+				</div>
+
+				<!-- 帖子内容（独立表单项，与上传区域结构对齐） -->
+				<div class="layui-form-item">
+					<label class="layui-form-label">帖子内容</label>
+					<div class="layui-input-block">
+						<textarea name="content" lay-verify="required" placeholder="请输入帖子内容"
+							class="layui-textarea"></textarea>
+					</div>
+				</div>
+
+				<!-- 操作按钮区域（独立于表单项） -->
+				<div class="operation-bar">
+					<button type="button" class="layui-btn layui-btn-primary" id="cancelBtn">取消</button>
+					<button class="layui-btn" lay-submit="" lay-filter="submitPost">保存</button>
+				</div>
+			</form>
+		</div>
+
+		<!-- 修复JS加载顺序：仅加载一次依赖库，避免冲突 -->
+		<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+		<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+		<script>
+			layui.use(['form', 'layer'], function() {
+				var form = layui.form,
+					layer = layui.layer;
+				var uploadedFile = null; // 存储已上传文件信息
+
+				// 绑定上传按钮点击事件，触发文件选择
+				document.getElementById('uploadBtn').addEventListener('click', function() {
+					document.getElementById('fileInput').click();
+				});
+
+				// 处理文件选择
+				document.getElementById('fileInput').addEventListener('change', function(e) {
+					var file = e.target.files[0];
+					if (!file) return;
+
+					// 验证文件类型
+					var allowedTypes = ['image/jpeg', 'image/png', 'text/plain', 'application/pdf'];
+					if (!allowedTypes.includes(file.type)) {
+						layer.msg('不支持的文件类型，仅允许jpg、png、txt、pdf', {
+							icon: 2
+						});
+						this.value = '';
+						return;
+					}
+
+					// 验证文件大小（20MB）
+					if (file.size > 20 * 1024 * 1024) {
+						layer.msg('文件过大，最大支持20MB', {
+							icon: 2
+						});
+						this.value = '';
+						return;
+					}
+
+					// 显示上传进度
+					document.getElementById('uploadInf').innerHTML = `
+						<p class="upload-progress">
+							<i class="layui-icon layui-icon-loading layui-icon-spin mr-1"></i>
+							正在上传：${file.name}...
+						</p>
+					`;
+
+					// 模拟文件上传
+					simulateUpload(file);
+				});
+
+				// 模拟文件上传过程
+				function simulateUpload(file) {
+					// 实际项目中这里会是真实的AJAX上传请求
+					setTimeout(() => {
+						// 模拟上传成功
+						uploadedFile = {
+							name: file.name,
+							type: file.type,
+							url: 'upload/' + file.name
+						};
+
+						// 显示上传成功信息
+						document.getElementById('uploadInf').innerHTML = `
+							<p class="success">
+								<i class="layui-icon layui-icon-ok mr-1"></i>
+								上传成功：${file.name}（可连同帖子一起保存）
+							</p>
+						`;
+
+						// 重置文件输入，允许重复选择同一文件
+						document.getElementById('fileInput').value = '';
+					}, 1500);
+				}
+
+				// 表单提交（保存帖子）
+				form.on('submit(submitPost)', function(data) {
+					// 整合表单数据与上传文件信息
+					var submitData = {
+						...data.field,
+						uploadedFile: uploadedFile
+					};
+
+					// 模拟提交数据
+					console.log('帖子提交数据:', submitData);
+
+					// 显示提交成功消息，并跳转到刘德华吧.html
+					layer.msg('帖子保存成功', {
+						icon: 1,
+						time: 1500
+					}, function() {
+						// 核心修改：跳转目标改为刘德华吧.html
+						window.location.href = './刘德华吧.html';
+					});
+
+					return false; // 阻止表单跳转
+				});
+
+				// 取消按钮事件
+				$('#cancelBtn').on('click', function() {
+					layer.confirm('确定要取消吗？未保存的数据将丢失。', {
+						btn: ['确定', '取消']
+					}, function() {
+						window.location.href = './刘德华吧.html';
+					});
+				});
+			});
+		</script>
+	</body>
+</html>

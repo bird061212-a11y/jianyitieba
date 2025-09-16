@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<title>贴吧私信 - 我的消息</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<!-- 合并重复样式引用，保持加载顺序 -->
+		<link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+		<link rel="stylesheet" href="../css/public.css" media="all">
+		<link rel="stylesheet" href="../lib/jq-module/zyupload/zyupload-1.0.0.min.css" media="all">
+		<style>
+			/* 保持原有样式框架，仅补充私信界面基础样式 */
+			.msg-sidebar {
+				border-right: 1px solid #eee;
+				height: calc(100vh - 160px);
+				overflow-y: auto;
+			}
+
+			.msg-chat {
+				height: calc(100vh - 160px);
+				display: flex;
+				flex-direction: column;
+			}
+
+			.msg-list-item {
+				padding: 12px 15px;
+				cursor: pointer;
+				border-bottom: 1px solid #f5f5f5;
+				transition: background-color 0.2s;
+			}
+
+			.msg-list-item:hover,
+			.msg-list-item.active {
+				background-color: #f8f9fa;
+			}
+
+			.msg-list-item .unread {
+				display: inline-block;
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background-color: #FF5722;
+				margin-right: 5px;
+			}
+
+			.msg-content {
+				flex: 1;
+				padding: 20px;
+				overflow-y: auto;
+				background-color: #fafafa;
+			}
+
+			.msg-input-area {
+				padding: 15px;
+				border-top: 1px solid #eee;
+				background-color: #fff;
+			}
+
+			.msg-item {
+				margin-bottom: 15px;
+				max-width: 70%;
+			}
+
+			.msg-item.send {
+				margin-left: auto;
+			}
+
+			.msg-item .msg-bubble {
+				padding: 10px 15px;
+				border-radius: 8px;
+				position: relative;
+			}
+
+			.msg-item.receive .msg-bubble {
+				background-color: #fff;
+				border: 1px solid #eee;
+			}
+
+			.msg-item.send .msg-bubble {
+				background-color: #009688;
+				color: #fff;
+			}
+
+			.msg-item .msg-time {
+				font-size: 12px;
+				color: #999;
+				margin-top: 5px;
+				text-align: right;
+			}
+
+			/* 优化上传按钮样式，适配私信场景 */
+			#uploadBtn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			/* 隐藏原生文件输入 */
+			#fileInput {
+				display: none;
+			}
+
+			/* 隐藏zyupload默认界面，仅保留功能逻辑 */
+			.zyupload .zyupload-box {
+				display: none !important;
+			}
+
+			#uploadInf p {
+				font-size: 12px;
+				margin-top: 8px;
+				line-height: 1.5;
+			}
+
+			#uploadInf .success {
+				color: #009688;
+			}
+
+			#uploadInf .error {
+				color: #FF5722;
+			}
+
+			/* 上传进度提示 */
+			.upload-progress {
+				color: #1E9FFF;
+				font-size: 12px;
+				margin-top: 8px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+				<blockquote class="layui-elem-quote">
+					私信中心 - 与贴吧用户一对一交流
+				</blockquote>
+
+				<div class="layui-row layui-col-space10">
+					<!-- 左侧联系人列表 -->
+					<div class="layui-col-md3 msg-sidebar">
+						<div class="layui-input-group" style="margin: 10px 0;">
+							<input type="text" class="layui-input" placeholder="搜索联系人">
+							<div class="layui-input-suffix">
+								<i class="layui-icon layui-icon-search"></i>
+							</div>
+						</div>
+
+						<!-- 联系人列表 -->
+						<div class="msg-list">
+							<div class="msg-list-item active">
+								<div class="layui-flex layui-items-center">
+									<div class="layui-avatar layui-circle"
+										style="width: 40px; height: 40px; background-color: #1E9FFF; color: #fff; line-height: 40px; text-align: center; margin-right: 10px;">
+										张</div>
+									<div class="layui-flex-1">
+										<div class="layui-flex layui-items-center layui-justify-between">
+											<h4 class="layui-font-medium">游戏爱好者小张</h4>
+											<span class="layui-text-xs layui-text-gray">10:23</span>
+										</div>
+										<p class="layui-text-xs layui-text-gray-500 mt-1">
+											<span class="unread"></span>
+											那个攻略我试过了，真的有用！
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="msg-list-item">
+								<div class="layui-flex layui-items-center">
+									<div class="layui-avatar layui-circle"
+										style="width: 40px; height: 40px; background-color: #FFB800; color: #fff; line-height: 40px; text-align: center; margin-right: 10px;">
+										李</div>
+									<div class="layui-flex-1">
+										<div class="layui-flex layui-items-center layui-justify-between">
+											<h4 class="layui-font-medium">小说迷小李</h4>
+											<span class="layui-text-xs layui-text-gray">昨天</span>
+										</div>
+										<p class="layui-text-xs layui-text-gray-500 mt-1">求推荐几本玄幻小说~</p>
+									</div>
+								</div>
+							</div>
+							<div class="msg-list-item">
+								<div class="layui-flex layui-items-center">
+									<div class="layui-avatar layui-circle"
+										style="width: 40px; height: 40px; background-color: #FF5722; color: #fff; line-height: 40px; text-align: center; margin-right: 10px;">
+										王</div>
+									<div class="layui-flex-1">
+										<div class="layui-flex layui-items-center layui-justify-between">
+											<h4 class="layui-font-medium">贴吧管理员小王</h4>
+											<span class="layui-text-xs layui-text-gray">3天前</span>
+										</div>
+										<p class="layui-text-xs layui-text-gray-500 mt-1">您的帖子已设为精品帖</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- 右侧聊天区域 -->
+					<div class="layui-col-md9 msg-chat">
+						<!-- 聊天头部 -->
+						<div class="layui-card-header layui-bg-gray">
+							<div class="layui-flex layui-items-center">
+								<div class="layui-avatar layui-circle"
+									style="width: 36px; height: 36px; background-color: #1E9FFF; color: #fff; line-height: 36px; text-align: center; margin-right: 10px;">
+									张</div>
+								<h3 class="layui-font-medium">游戏爱好者小张</h3>
+							</div>
+						</div>
+
+						<!-- 聊天内容区 -->
+						<div class="msg-content">
+							<div class="msg-item receive">
+								<div class="msg-bubble">你好，请问上次分享的游戏攻略里，BOSS阶段怎么躲技能呀？</div>
+								<div class="msg-time">09:45</div>
+							</div>
+							<div class="msg-item send">
+								<div class="msg-bubble">注意看BOSS抬手动作，出现红光时往左翻滚就行，大概有1.5秒反应时间</div>
+								<div class="msg-time">09:47</div>
+							</div>
+							<div class="msg-item receive">
+								<div class="msg-bubble">好的！我之前总是反应不过来，今晚再试试</div>
+								<div class="msg-time">10:20</div>
+							</div>
+							<div class="msg-item receive">
+								<div class="msg-bubble">那个攻略我试过了，真的有用！</div>
+								<div class="msg-time">10:23</div>
+							</div>
+							<!-- 文件消息示例 -->
+							<div class="msg-item send">
+								<div class="msg-bubble">
+									<div class="layui-flex layui-items-center">
+										<i class="layui-icon layui-icon-file-png mr-2"></i>
+										<span>BOSS技能躲避示意图.png</span>
+									</div>
+								</div>
+								<div class="msg-time">10:26</div>
+							</div>
+						</div>
+
+						<!-- 输入区域 -->
+						<div class="msg-input-area">
+							<form class="layui-form" lay-filter="msg-form">
+								<textarea name="msgContent" placeholder="请输入消息内容..." class="layui-textarea"
+									style="min-height: 80px; resize: none; margin-bottom: 10px;"></textarea>
+								<div class="layui-flex layui-items-center layui-justify-between">
+									<div class="layui-btn-group">
+										<!-- 优化后的文件上传按钮 -->
+										<input type="file" id="fileInput" accept=".jpg,.png,.jpeg,.txt,.pdf" />
+										<button type="button" class="layui-btn layui-btn-primary layui-btn-sm" id="uploadBtn">
+											<i class="layui-icon layui-icon-upload mr-1"></i>上传文件
+										</button>
+									</div>
+									<button class="layui-btn" lay-submit lay-filter="sendMsg">发送消息</button>
+								</div>
+								<!-- 上传信息展示区 -->
+								<div id="uploadInf"></div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 调整JS加载顺序：先加载依赖库，再加载业务逻辑 -->
+		<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+		<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+		<script>
+			layui.use(['form', 'layer'], function() {
+				var form = layui.form,
+					layer = layui.layer;
+
+				// 切换联系人
+				document.querySelectorAll('.msg-list-item').forEach(item => {
+					item.addEventListener('click', function() {
+						document.querySelectorAll('.msg-list-item').forEach(el => el.classList.remove('active'));
+						this.classList.add('active');
+						// 清空上传状态
+						document.getElementById('uploadInf').innerHTML = '';
+						// 重置文件输入
+						document.getElementById('fileInput').value = '';
+						window.uploadedFile = null;
+					});
+				});
+
+				// 绑定上传按钮点击事件，触发文件选择
+				document.getElementById('uploadBtn').addEventListener('click', function() {
+					document.getElementById('fileInput').click();
+				});
+
+				// 处理文件选择
+				document.getElementById('fileInput').addEventListener('change', function(e) {
+					var file = e.target.files[0];
+					if (!file) return;
+
+					// 验证文件类型
+					var allowedTypes = ['image/jpeg', 'image/png', 'text/plain', 'application/pdf'];
+					if (!allowedTypes.includes(file.type)) {
+						layer.msg('不支持的文件类型，仅允许jpg、png、txt、pdf', {icon: 2});
+						this.value = '';
+						return;
+					}
+
+					// 验证文件大小（20MB）
+					if (file.size > 20 * 1024 * 1024) {
+						layer.msg('文件过大，最大支持20MB', {icon: 2});
+						this.value = '';
+						return;
+					}
+
+					// 显示上传进度
+					document.getElementById('uploadInf').innerHTML = `
+						<p class="upload-progress">
+							<i class="layui-icon layui-icon-loading layui-icon-spin mr-1"></i>
+							正在上传：${file.name}...
+						</p>
+					`;
+
+					// 模拟文件上传
+					simulateUpload(file);
+				});
+
+				// 模拟文件上传过程
+				function simulateUpload(file) {
+					// 实际项目中这里会是真实的AJAX上传请求
+					setTimeout(() => {
+						// 模拟上传成功
+						window.uploadedFile = {
+							name: file.name,
+							type: file.type,
+							url: 'upload/' + file.name
+						};
+
+						// 显示上传成功信息
+						document.getElementById('uploadInf').innerHTML = `
+							<p class="success">
+								<i class="layui-icon layui-icon-ok mr-1"></i>
+								上传成功：${file.name}（可连同消息一起发送）
+							</p>
+						`;
+
+						// 重置文件输入，允许重复选择同一文件
+						document.getElementById('fileInput').value = '';
+					}, 1500);
+				}
+
+				// 发送消息（支持文本+上传文件）
+				form.on('submit(sendMsg)', function(data) {
+					var msg = data.field.msgContent.trim();
+					var uploadedFile = window.uploadedFile;
+
+					// 文本和文件至少一项
+					if (!msg && !uploadedFile) {
+						layer.tips('请输入消息内容或上传文件', '[name="msgContent"]', {tips: 1});
+						return false;
+					}
+
+					// 模拟发送消息
+					var now = new Date();
+					var timeStr = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes());
+					var msgHtml = '';
+
+					// 文本消息
+					if (msg) {
+						msgHtml += `
+							<div class="msg-item send">
+								<div class="msg-bubble">${msg}</div>
+								<div class="msg-time">${timeStr}</div>
+							</div>
+						`;
+					}
+
+					// 文件消息
+					if (uploadedFile) {
+						// 根据文件类型显示对应图标
+						var fileIcon = 'file-txt';
+						if (uploadedFile.type.includes('image')) {
+							fileIcon = 'file-png';
+						} else if (uploadedFile.type.includes('pdf')) {
+							fileIcon = 'file-pdf';
+						}
+
+						msgHtml += `
+							<div class="msg-item send">
+								<div class="msg-bubble">
+									<div class="layui-flex layui-items-center">
+										<i class="layui-icon layui-icon-${fileIcon} mr-2"></i>
+										<span>${uploadedFile.name}</span>
+									</div>
+								</div>
+								<div class="msg-time">${timeStr}</div>
+							</div>
+						`;
+
+						// 重置上传状态
+						document.getElementById('uploadInf').innerHTML = '';
+						window.uploadedFile = null;
+					}
+
+					// 插入消息并滚动到底部
+					var contentDom = document.querySelector('.msg-content');
+					contentDom.insertAdjacentHTML('beforeend', msgHtml);
+					contentDom.scrollTop = contentDom.scrollHeight;
+
+					// 清空输入框
+					document.querySelector('[name="msgContent"]').value = '';
+					return false;
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOBA游戏吧</title>
+    <!-- 引入Tailwind CSS框架 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标库 -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6', 
+                        secondary: '#10B981', 
+                        accent: '#F59E0B', 
+                        dark: '#1F2937', 
+                        light: '#F3F4F6' 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            }
+            .tag-hot {
+                background: linear-gradient(120deg, #FF6B6B, #F59E0B);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-dark">
+    <!-- 顶部搜索区 -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between mb-3">
+                <h1 class="text-xl font-bold text-dark">MOBA游戏吧</h1>
+                <button id="toggleMobileSearch" class="md:hidden text-gray-500 hover:text-primary">
+                    <i class="fa fa-search text-lg"></i>
+                </button>
+            </div>
+
+            <!-- 桌面端搜索框 -->
+            <div class="hidden md:block relative mb-2">
+                <input type="text" placeholder="搜索MOBA英雄/战术攻略"
+                    class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+
+            <!-- 移动端搜索框 -->
+            <div class="md:hidden relative hidden" id="mobileSearch">
+                <input type="text" placeholder="搜索MOBA游戏..."
+                    class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 中心内容区 -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 板块说明 -->
+        <div class="bg-white rounded-lg p-4 mb-6 border border-gray-100">
+            <p class="text-gray-600 text-sm">
+                <i class="fa fa-info-circle text-primary mr-1"></i>
+                MOBA游戏交流社区，分享英雄玩法、战术思路、出装搭配与赛事解析
+            </p>
+        </div>
+
+        <!-- MOBA内容列表（不做详细分类，仅展示热门） -->
+        <section class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-dark">热门MOBA游戏主题</h2>
+                <a href="#" class="text-xs text-primary hover:underline">查看全部 <i class="fa fa-angle-right ml-1"></i></a>
+            </div>
+
+            <!-- 内容卡片网格 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- 主题1 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1025/60/60" alt="法师英雄" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">法师英雄吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 398.5万</p>
+                            <p class="text-xs text-gray-500">攻略 922.8万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 主题2 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1074/60/60" alt="射手英雄" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">射手英雄吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 378.2万</p>
+                            <p class="text-xs text-gray-500">出装 876.3万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 主题3 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1060/60/60" alt="打野技巧" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">打野技巧吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 366.7万</p>
+                            <p class="text-xs text-gray-500">思路 811.5万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 主题4 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1080/60/60" alt="辅助玩法" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">辅助玩法吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 315.3万</p>
+                            <p class="text-xs text-gray-500">保护 728.6万</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 主题5 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1040/60/60" alt="上单抗压" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">上单抗压吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 338.4万</p>
+                            <p class="text-xs text-gray-500">对线 785.2万</p>
+                        </div>
+                        <span class="tag-hot text-white text-xs px-2 py-0.5 rounded-full">热门</span>
+                    </div>
+                </a>
+
+                <!-- 主题6 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1058/60/60" alt="团队战术" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">团队战术吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 285.8万</p>
+                            <p class="text-xs text-gray-500">配合 636.7万</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 主题7 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1035/60/60" alt="MOBA赛事" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">MOBA赛事吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 352.6万</p>
+                            <p class="text-xs text-gray-500">解析 848.4万</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 主题8 -->
+                <a href="#" class="bg-white rounded-xl border border-gray-100 p-4 card-hover">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://picsum.photos/id/1028/60/60" alt="新游速递" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h3 class="font-medium text-sm truncate">MOBA新游吧</h3>
+                            <p class="text-xs text-gray-500 mt-1">关注 275.3万</p>
+                            <p class="text-xs text-gray-500">测评 592.1万</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 移动端搜索切换功能
+        document.getElementById('toggleMobileSearch').addEventListener('click', function() {
+            const mobileSearch = document.getElementById('mobileSearch');
+            mobileSearch.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

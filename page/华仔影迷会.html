@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title></title>
+		<!-- 引入Tailwind CSS框架 -->
+		<script src="https://cdn.tailwindcss.com"></script>
+		<!-- 引入Font Awesome图标库 -->
+		<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+		<!-- Tailwind自定义配置 - 扩展主题颜色和字体 -->
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							primary: '#3B82F6', // 主色调：蓝色（按钮、交互元素）
+							secondary: '#10B981', // 辅助色：绿色（点赞、成功）
+							accent: '#F59E0B', // 强调色：橙色（标识、热门）
+							dark: '#1F2937', // 深色（标题、文本）
+							light: '#F3F4F6' // 浅色（背景、边框）
+						},
+						fontFamily: {
+							sans: ['Inter', 'system-ui', 'sans-serif'],
+						},
+					}
+				}
+			}
+		</script>
+		<!-- 自定义Tailwind工具类 -->
+		<style type="text/tailwindcss">
+			@layer utilities {
+		        .content-auto {
+		            content-visibility: auto;
+		        }
+		        .card-hover {
+		            transition: all 0.3s ease;
+		        }
+		        .card-hover:hover {
+		            transform: translateY(-5px);
+		            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+		        }
+		        .reply-hover {
+		            transition: background-color 0.2s ease;
+		        }
+		        .reply-hover:hover {
+		            background-color: rgba(59, 130, 246, 0.03);
+		        }
+		    }
+		</style>
+	</head>
+	<body>
+		<div class="space-y-6">
+			<main class="container mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
+				<!-- 中间内容区 - 核心帖子+回复功能 -->
+				<section class="md:w-3/5 lg:w-4/6 flex-grow">
+					<section class="max-w-3xl mx-auto">
+						<!-- 帖子1：刘德华新电影消息 -->
+						<article class="bg-white rounded-xl shadow-sm overflow-hidden card-hover mb-6">
+							<div class="p-4">
+								<div class="flex items-start space-x-3">
+									<img src="https://picsum.photos/id/1005/40/40" alt="华仔影迷会头像"
+										class="w-10 h-10 rounded-full object-cover">
+									<div class="flex-grow">
+										<div class="flex items-center justify-between">
+											<div>
+												<h3 class="font-medium text-dark">华仔影迷会</h3>
+												<p class="text-xs text-gray-500">2小时前 · 刘德华吧</p>
+											</div>
+											<button class="text-gray-400 hover:text-gray-600 transition-colors">
+												<i class="fa fa-ellipsis-h"></i>
+											</button>
+										</div>
+
+										<div class="mt-3">
+											<h4 class="text-lg font-semibold text-dark mb-2">刘德华新电影《红毯先生》票房破亿！</h4>
+											<p class="text-gray-600 mb-3">
+												华仔最新主演的电影《红毯先生》上映三天票房已经突破1亿！这部电影讲述了一位过气影帝为了重返巅峰，与导演合作拍摄农村题材影片的故事，华仔在片中的表演获得了影评人和观众的一致好评。
+											</p>
+
+											<!-- 电影图片组 -->
+											<div class="grid grid-cols-2 gap-1 mb-3">
+												<img src="https://picsum.photos/id/237/600/400" alt="红毯先生电影海报"
+													class="rounded-lg w-full h-40 object-cover">
+												<img src="https://picsum.photos/id/239/600/400" alt="刘德华电影剧照"
+													class="rounded-lg w-full h-40 object-cover">
+											</div>
+										</div>
+
+										<div
+											class="flex justify-between items-center text-sm text-gray-500 pt-2 border-t border-gray-100">
+											<button
+												class="flex items-center space-x-1 hover:text-primary transition-colors">
+												<i class="fa fa-thumbs-o-up"></i>
+												<span>2568</span>
+											</button>
+											<button
+												class="flex items-center space-x-1 hover:text-primary transition-colors">
+												<i class="fa fa-star-o"></i>
+												<span>892</span>
+											</button>
+											<button
+												class="flex items-center space-x-1 hover:text-primary transition-colors">
+												<i class="fa fa-share-alt"></i>
+												<span>分享</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</article>
+						<div class="bg-white rounded-xl shadow-sm p-4 mb-4">
+							<div class="flex items-start space-x-3">
+								<!-- 当前用户头像 -->
+								<img src="https://picsum.photos/id/64/40/40" alt="你的头像"
+									class="w-9 h-9 rounded-full object-cover">
+								<div class="flex-grow">
+									<!-- 回复输入框 -->
+									<textarea id="replyContent" placeholder="来说说你的看法..."
+										class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary resize-none min-h-[80px] text-sm"
+										maxlength="200"></textarea>
+									<!-- 输入字数提示 -->
+									<div class="flex justify-between items-center mt-2">
+										<span id="wordCount" class="text-xs text-gray-500">0/200</span>
+										<!-- 发表回复按钮 -->
+										<button id="submitReply"
+											class="bg-primary text-white px-4 py-1.5 rounded-lg text-sm hover:bg-primary/90 transition-colors">
+											发表回复
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 2. 回复列表（核心功能：展示已有回复+互动） -->
+						<div class="bg-white rounded-xl shadow-sm p-4 mb-6" id="replyList">
+							<h5 class="font-medium text-dark mb-3">全部回复 (7)</h5>
+
+							<!-- 回复1：普通用户回复 -->
+							<div class="flex items-start space-x-3 mb-4 reply-hover p-2 rounded-lg">
+								<img src="https://picsum.photos/id/1001/40/40" alt="用户头像"
+									class="w-8 h-8 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<h6 class="font-medium text-sm text-dark">华仔迷阿花</h6>
+										<span class="text-xs text-gray-500">2小时前</span>
+									</div>
+									<p class="text-sm text-gray-600 mt-1">
+										123123</p>
+									<!-- 回复互动（点赞） -->
+									<button
+										class="flex items-center space-x-1 text-xs text-gray-500 mt-2 hover:text-secondary transition-colors reply-like"
+										data-id="1">
+										<i class="fa fa-thumbs-o-up"></i>
+										<span>36</span>
+									</button>
+								</div>
+							</div>
+
+							<!-- 回复2：普通用户回复 -->
+							<div class="flex items-start space-x-3 mb-4 reply-hover p-2 rounded-lg">
+								<img src="https://picsum.photos/id/1002/40/40" alt="用户头像"
+									class="w-8 h-8 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<h6 class="font-medium text-sm text-dark">1231232/h6>
+											<span class="text-xs text-gray-500">1小时前</span>
+									</div>
+									<p class="text-sm text-gray-600 mt-1">
+										1231313</p>
+									<!-- 回复互动（点赞） -->
+									<button
+										class="flex items-center space-x-1 text-xs text-gray-500 mt-2 hover:text-secondary transition-colors reply-like"
+										data-id="2">
+										<i class="fa fa-thumbs-o-up"></i>
+										<span>22</span>
+									</button>
+								</div>
+							</div>
+
+							<!-- 回复3：普通用户回复 -->
+							<div class="flex items-start space-x-3 mb-4 reply-hover p-2 rounded-lg">
+								<img src="https://picsum.photos/id/1003/40/40" alt="用户头像"
+									class="w-8 h-8 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<h6 class="font-medium text-sm text-dark">354345王</h6>
+										<span class="text-xs text-gray-500">40分钟前</span>
+									</div>
+									<p class="text-sm text-gray-600 mt-1">34534453
+									</p>
+									<!-- 回复互动（点赞） -->
+									<button
+										class="flex items-center space-x-1 text-xs text-gray-500 mt-2 hover:text-secondary transition-colors reply-like"
+										data-id="3">
+										<i class="fa fa-thumbs-o-up"></i>
+										<span>18</span>
+									</button>
+								</div>
+							</div>
+
+							<!-- 回复4：普通用户回复 -->
+							<div class="flex items-start space-x-3 mb-4 reply-hover p-2 rounded-lg">
+								<img src="https://picsum.photos/id/1004/40/40" alt="用户头像"
+									class="w-8 h-8 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<h6 class="font-medium text-sm text-dark">37735
+											<span class="text-xs text-gray-500">30分钟前</span>
+									</div>
+									<p class="text-sm text-gray-600 mt-1">
+										337734345453</p>
+									<!-- 回复互动（点赞） -->
+									<button
+										class="flex items-center space-x-1 text-xs text-gray-500 mt-2 hover:text-secondary transition-colors reply-like"
+										data-id="4">
+										<i class="fa fa-thumbs-o-up"></i>
+										<span>25</span>
+									</button>
+								</div>
+							</div>
+
+							<!-- 回复5：普通用户回复 -->
+							<div class="flex items-start space-x-3 mb-4 reply-hover p-2 rounded-lg">
+								<img src="https://picsum.photos/id/1005/40/40" alt="用户头像"
+									class="w-8 h-8 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<h6 class="font-medium text-sm text-dark">3435435</h6>
+										<span class="text-xs text-gray-500">25分钟前</span>
+									</div>
+									<p class="text-sm text-gray-600 mt-1">34545343453</p>
+									<!-- 回复互动（点赞） -->
+									<button
+										class="flex items-center space-x-1 text-xs text-gray-500 mt-2 hover:text-secondary transition-colors reply-like"
+										data-id="5">
+										<i class="fa fa-thumbs-o-up"></i>
+										<span>12</span>
+									</button>
+								</div>
+							</div>
+
+							<!-- 回复6：普通用户回复 -->
+							<div class="flex items-start space-x-3 mb-4 reply-hover p-2 rounded-lg">
+								<img src="https://picsum.photos/id/1006/40/40" alt="用户头像"
+									class="w-8 h-8 rounded-full object-cover">
+								<div class="flex-grow">
+									<div class="flex items-center justify-between">
+										<h6 class="font-medium text-sm text-dark">34535434</h6>
+										<span class="text-xs text-gray-500">15分钟前</span>
+									</div>
+									<p class="text-sm text-gray-600 mt-1">345343434345</p>
+									<!-- 回复互动（点赞） -->
+									<button
+										class="flex items-center space-x-1 text-xs text-gray-500 mt-2 hover:text-secondary transition-colors reply-like"
+										data-id="6">
+										<i class="fa fa-thumbs-o-up"></i>
+										<span>19</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</section>
+			</main>
+		</div>
+		<script>
+		        // 1. 回复输入字数统计
+		        const replyContent = document.getElementById('replyContent');
+		        const wordCount = document.getElementById('wordCount');
+		        
+		        replyContent.addEventListener('input', function() {
+		            const length = this.value.trim().length;
+		            wordCount.textContent = `${length}/200`;
+		            // 超过200字截断
+		            if (length > 200) {
+		                this.value = this.value.substring(0, 200);
+		                wordCount.textContent = '200/200';
+		            }
+		        });
+		
+		        // 2. 发表回复功能
+		        const submitReply = document.getElementById('submitReply');
+		        const replyList = document.getElementById('replyList');
+		        const replyCount = document.getElementById('replyCount');
+		        
+		        submitReply.addEventListener('click', function() {
+		            const content = replyContent.value.trim();
+		            if (!content) {
+		                alert('请输入回复内容');
+		                return;
+		            }
+		
+		            // 生成新回复HTML（模拟实时添加，无需后端）
+		            const newReply = `
+		                <div class="flex items-start space-x-3 mb-4 reply-hover p-2 rounded-lg">
+		                    <img src="https://picsum.photos/id/64/40/40" alt="你的头像"
+		                        class="w-8 h-8 rounded-full object-cover">
+		                    <div class="flex-grow">
+		                        <div class="flex items-center justify-between">
+		                            <h6 class="font-medium text-sm text-dark">我</h6>
+		                            <span class="text-xs text-gray-500">刚刚</span>
+		                        </div>
+		                        <p class="text-sm text-gray-600 mt-1">${content}</p>
+		                        <button class="flex items-center space-x-1 text-xs text-gray-500 mt-2 hover:text-secondary transition-colors reply-like" data-id="new">
+		                            <i class="fa fa-thumbs-o-up"></i>
+		                            <span>0</span>
+		                        </button>
+		                    </div>
+		                </div>
+		            `;
+		
+		            // 添加到回复列表顶部
+		            replyList.insertAdjacentHTML('afterbegin', newReply);
+		            // 更新回复数
+		            const currentCount = parseInt(replyCount.textContent);
+		            replyCount.textContent = currentCount + 1;
+		            // 清空输入框
+		            replyContent.value = '';
+		            wordCount.textContent = '0/200';
+		            // 滚动到新回复位置
+		            document.querySelector('.reply-hover[data-id="new"]').scrollIntoView({ behavior: 'smooth', block: 'center' });
+		        });
+		
+		        // 3. 回复点赞功能（切换状态+计数）
+		        document.addEventListener('click', function(e) {
+		            if (e.target.closest('.reply-like')) {
+		                const likeBtn = e.target.closest('.reply-like');
+		                const likeIcon = likeBtn.querySelector('i');
+		                const likeNum = likeBtn.querySelector('span');
+		                const currentNum = parseInt(likeNum.textContent);
+		
+		                // 切换点赞状态
+		                if (likeIcon.classList.contains('fa-thumbs-o-up')) {
+		                    likeIcon.classList.replace('fa-thumbs-o-up', 'fa-thumbs-up');
+		                    likeBtn.classList.add('text-secondary');
+		                    likeNum.textContent = currentNum + 1;
+		                } else {
+		                    likeIcon.classList.replace('fa-thumbs-up', 'fa-thumbs-o-up');
+		                    likeBtn.classList.remove('text-secondary');
+		                    likeNum.textContent = currentNum - 1;
+		                }
+		            }
+		        });
+		    </script>
+		</body>
+		</html>

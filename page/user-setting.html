@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>基本资料</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        .layui-form-item .layui-input-company {width: auto;padding-right: 10px;line-height: 38px;}
+        
+        /* 头像上传相关样式 */
+        .avatar-upload-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #eee;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        .avatar-upload-btn {
+            margin-top: 10px;
+        }
+        .avatar-tip {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        #avatarFile {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <div class="layui-form layuimini-form">
+            <!-- 头像上传区域 -->
+            <div class="layui-form-item">
+                <label class="layui-form-label required">用户头像</label>
+                <div class="layui-input-block">
+                    <div class="avatar-upload-group">
+                        <!-- 头像预览 -->
+                        <img id="avatarPreview" src="https://picsum.photos/id/64/80/80" 
+                             alt="用户头像" class="avatar-preview">
+                        
+                        <!-- 上传按钮 -->
+                        <div>
+                            <button type="button" class="layui-btn layui-btn-normal avatar-upload-btn" id="selectAvatar">
+                                <i class="layui-icon"></i> 选择头像
+                            </button>
+                            <input type="file" id="avatarFile" accept="image/jpg,image/jpeg,image/png">
+                            <p class="avatar-tip">支持JPG、PNG格式图片</p>
+                            
+                            <!-- 用于表单提交的隐藏字段 -->
+                            <input type="hidden" name="avatarUrl" id="avatarUrl" value="https://picsum.photos/id/64/80/80">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">账号名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" lay-verify="required" lay-reqtext="账号不能为空" placeholder="请输账号"  value="admin" class="layui-input">
+                    <tip>填写自己账号的名称。</tip>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">手机</label>
+                <div class="layui-input-block">
+                    <input type="number" name="phone" lay-verify="required" lay-reqtext="手机不能为空" placeholder="请输入手机"  value="" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-block">
+                    <input type="email" name="email"  placeholder="请输入邮箱"  value="" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注信息</label>
+                <div class="layui-input-block">
+                    <textarea name="remark" class="layui-textarea" placeholder="请输入备注信息"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['form','miniTab', 'layer'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            miniTab = layui.miniTab;
+
+        // 头像上传功能
+        $('#selectAvatar').click(function() {
+            $('#avatarFile').click();
+        });
+
+        // 选择图片后预览
+        $('#avatarFile').change(function(e) {
+            var file = e.target.files[0];
+            if (!file) return;
+
+            // 仅验证图片格式
+            var validTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                layer.msg('请选择JPG或PNG格式的图片', {icon: 5});
+                $(this).val(''); // 清空选择
+                return;
+            }
+
+            // 读取图片并预览
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#avatarPreview').attr('src', e.target.result);
+                $('#avatarUrl').val(e.target.result); // 存储图片数据
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // 监听提交
+        form.on('submit(saveBtn)', function (data) {
+            // 包含头像信息的完整表单数据
+            var index = layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            }, function () {
+                layer.close(index);
+                miniTab.deleteCurrentByIframe();
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

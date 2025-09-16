@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>贴吧通知接收页</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/layuimini.css" media="all">
+    <style>
+        /* 全局背景设置为白色，去除默认边距 */
+        body {
+            background-color: #fff !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 移除layuimini默认容器内边距，减少空白 */
+        .layuimini-container {
+            padding: 0 !important;
+        }
+
+        .layuimini-main {
+            margin: 0 !important;
+        }
+
+        /* 通知项样式 */
+        .notice-item {
+            padding: 15px;
+            border-bottom: 1px solid #f2f2f2;
+            background-color: #fff;
+        }
+
+        .notice-item:last-child {
+            border-bottom: none;
+        }
+
+        .notice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .notice-type {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .type-like {
+            background-color: #e8f4fd;
+            color: #1E9FFF;
+        }
+
+        .type-comment {
+            background-color: #f0f9eb;
+            color: #5FB878;
+        }
+
+        .type-audit {
+            background-color: #fff7e8;
+            color: #FFB800;
+        }
+
+        .type-system {
+            background-color: #fef0f0;
+            color: #FF5722;
+        }
+
+        .notice-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .notice-content {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+
+        .notice-extra {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* 空状态样式 */
+        .empty-notice {
+            text-align: center;
+            padding: 80px 0;
+            color: #999;
+        }
+
+        .empty-notice i {
+            font-size: 60px;
+            margin-bottom: 15px;
+            color: #eee;
+        }
+
+        /* 调整卡片内边距，减少空白 */
+        .layui-card-header {
+            padding: 12px 15px !important;
+        }
+
+        .layui-card-body {
+            padding: 15px !important;
+        }
+
+        /* 简化分页区域边距 */
+        .layui-laypage {
+            margin-top: 15px !important;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+    <!-- 顶部导航栏（保留核心用户入口） -->
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header" style="background-color: #fff; border-bottom: 1px solid #f2f2f2;">
+            <ul class="layui-nav layui-layout-right" style="margin-right: 15px;">
+                <li class="layui-nav-item">
+                    <a href="user-setting.html">
+                        <img src="https://picsum.photos/id/1005/40/40" class="layui-nav-img">
+                        用户
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 主体内容区 -->
+        <div class="layui-body" style="padding: 0; background-color: #fff;">
+            <div class="layuimini-container">
+                <div class="layuimini-main">
+                    <!-- 页面标题卡片 -->
+                    <div class="layui-card" style="border-radius: 0; border: none;">
+                        <div class="layui-card-header">
+                            <h3>通知中心</h3>
+                            <p class="layuiadmin-breadcrumb" style="margin-top: 5px; color: #999;">
+                                仅接收通知，无需回复
+                            </p>
+                        </div>
+                        <div class="layui-card-body" style="padding-top: 0;">
+                            <!-- 通知列表容器 -->
+                            <div class="layui-card" id="noticeContainer" style="border: 1px solid #f2f2f2; border-radius: 4px;">
+                                <!-- 通知项1：点赞通知 -->
+                                <div class="notice-item">
+                                    <div class="notice-header">
+                                        <span class="notice-type type-like">点赞通知</span>
+                                        <span class="notice-time">2025-09-17 09:23</span>
+                                    </div>
+                                    <div class="notice-content">
+                                        用户"影视爱好者小周"赞了您的帖子《刘德华新片细节解析》
+                                    </div>
+                                    <div class="notice-extra">
+                                        相关帖子：刘德华新片细节解析
+                                    </div>
+                                </div>
+
+                                <!-- 通知项2：评论通知 -->
+                                <div class="notice-item">
+                                    <div class="notice-header">
+                                        <span class="notice-type type-comment">评论通知</span>
+                                        <span class="notice-time">2025-09-17 08:15</span>
+                                    </div>
+                                    <div class="notice-content">
+                                        用户"音乐迷阿泽"评论了您的帖子："这段配乐确实是影片亮点，太有感染力了！"
+                                    </div>
+                                    <div class="notice-extra">
+                                        相关帖子：刘德华新片细节解析
+                                    </div>
+                                </div>
+
+                                <!-- 通知项3：审核通知 -->
+                                <div class="notice-item">
+                                    <div class="notice-header">
+                                        <span class="notice-type type-audit">审核通知</span>
+                                        <span class="notice-time">2025-09-16 16:40</span>
+                                    </div>
+                                    <div class="notice-content">
+                                        您发布的帖子《演唱会现场高清图汇总》已通过审核，可正常展示
+                                    </div>
+                                    <div class="notice-extra">
+                                        审核时间：2025-09-16 16:40
+                                    </div>
+                                </div>
+
+                                <!-- 通知项4：系统通知 -->
+                                <div class="notice-item">
+                                    <div class="notice-header">
+                                        <span class="notice-type type-system">系统通知</span>
+                                        <span class="notice-time">2025-09-16 10:00</span>
+                                    </div>
+                                    <div class="notice-content">
+                                        您的帖子《旧帖整理：刘德华经典角色盘点》因内容优质被推荐至首页
+                                    </div>
+                                    <div class="notice-extra">
+                                        推荐生效时间：2025-09-16 10:00
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 分页（简化版） -->
+                            <div style="text-align: center;">
+                                <div class="layui-box layui-laypage layui-laypage-default">
+                                    <a href="javascript:;" class="layui-laypage-prev layui-disabled">上一页</a>
+                                    <span class="layui-laypage-curr"><em class="layui-laypage-em"></em><em>1</em></span>
+                                    <a href="javascript:;">2</a>
+                                    <a href="javascript:;">3</a>
+                                    <a href="javascript:;" class="layui-laypage-next">下一页</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="layui-footer" style="background-color: #fff; border-top: 1px solid #f2f2f2; color: #999;">
+            © 贴吧系统 - 仅接收通知 | 无需回复
+        </div>
+    </div>
+
+    <script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script>
+        layui.use(['element'], function () {
+            var element = layui.element;
+        });
+    </script>
+</body>
+</html>
