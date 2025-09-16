@@ -1,0 +1,438 @@
+{
+	"homeInfo": {
+		"title": "贴吧首页",
+		"href": "page/111.html"
+	},
+	"logoInfo": {
+		"title": "简易贴吧",
+		"image": "images/生成素材图.png",
+		"href": ""
+	},
+	"menuInfo": [{
+			"title": "贴吧运营",
+			"icon": "fa fa-tachometer",
+			"href": "page/111.html",
+			"target": "_self",
+			"child": [{
+					"title": "板块管理",
+					"href": "",
+					"icon": "fa fa-th-list",
+					"target": "_self",
+					"child": [{
+							"title": "娱乐明星",
+							"href": "",
+							"icon": "fa fa-star",
+							"target": "_self",
+							"child": [{
+									"title": "电影明星",
+									"href": "page/电影明星.html",
+									"icon": "fa fa-film",
+									"target": "_self"
+								},
+								{
+									"title": "歌手",
+									"href": "page/singer.html",
+									"icon": "fa fa-music",
+									"target": "_self"
+								}
+							]
+						},
+						{
+							"title": "体育赛事",
+							"href": "page/welcome-2.html",
+							"icon": "fa fa-trophy",
+							"target": "_self",
+							"child": [{
+									"title": "足球",
+									"href": "page/football.html",
+									"icon": "fa fa-futbol-o",
+									"target": "_self"
+								},
+								{
+									"title": "篮球",
+									"href": "page/basketball.html",
+									"icon": "fa fa-basketball-ball",
+									"target": "_self"
+								},
+								{
+									"title": "乒乓球",
+									"href": "page/pingpang.html",
+									"icon": "fa fa-table-tennis",
+									"target": "_self"
+								}
+							]
+						},
+						{
+							"title": "小说文学",
+							"href": "page/welcome-3.html",
+							"icon": "fa fa-book",
+							"target": "_self",
+							"child": [{
+									"title": "玄幻小说",
+									"href": "page/xuanhuan.html",
+									"icon": "fa fa-dragon",
+									"target": "_self"
+								},
+								{
+									"title": "都市小说",
+									"href": "page/dushi.html",
+									"icon": "fa fa-city",
+									"target": "_self"
+								},
+								{
+									"title": "历史小说",
+									"href": "page/lishi.html",
+									"icon": "fa fa-history",
+									"target": "_self"
+								},
+								{
+									"title": "科幻小说",
+									"href": "page/kehuan.html",
+									"icon": "fa fa-rocket",
+									"target": "_self"
+								},
+								{
+									"title": "言情小说",
+									"href": "page/yanqing.html",
+									"icon": "fa fa-heart",
+									"target": "_self"
+								}
+							]
+						},
+						{
+							"title": "生活分享",
+							"href": "",
+							"icon": "fa fa-home",
+							"target": "_self",
+							"child": [{
+									"title": "美食烹饪",
+									"href": "page/food.html",
+									"icon": "fa fa-cutlery",
+									"target": "_self"
+								},
+								{
+									"title": "家居装饰",
+									"href": "page/home_decoration.html",
+									"icon": "fa fa-paint-brush",
+									"target": "_self"
+								},
+								{
+									"title": "手工制作",
+									"href": "page/handmade.html",
+									"icon": "fa fa-pencil",
+									"target": "_self"
+								},
+								{
+									"title": "园艺绿植",
+									"href": "page/gardening.html",
+									"icon": "fa fa-leaf",
+									"target": "_self"
+								},
+								{
+									"title": "生活妙招",
+									"href": "page/life_tips.html",
+									"icon": "fa fa-lightbulb-o",
+									"target": "_self"
+								}
+							]
+						},
+						{
+							"title": "兴趣爱好",
+							"href": "",
+							"icon": "fa fa-smile-o",
+							"target": "_self",
+							"child": [{
+									"title": "摄影分享",
+									"href": "page/photography_share.html",
+									"icon": "fa fa-camera",
+									"target": "_self"
+								},
+								{
+									"title": "宠物趣事",
+									"href": "page/pet_stories.html",
+									"icon": "fa fa-paw",
+									"target": "_self"
+								},
+								{
+									"title": "旅行见闻",
+									"href": "page/旅行见闻.html",
+									"icon": "fa fa-plane",
+									"target": "_self"
+								},
+								{
+									"title": "棋类游戏",
+									"href": "page/棋类游戏.html",
+									"icon": "fa fa-gamepad",
+									"target": "_self"
+								},
+								{
+									"title": "书法绘画",
+									"href": "page/书法绘画.html",
+									"icon": "fa fa-palette",
+									"target": "_self"
+								}
+							]
+						},
+						{
+							"title": "游戏专区",
+							"href": "",
+							"icon": "fa fa-gamepad",
+							"target": "_self",
+							"child": [{
+									"title": "角色扮演（RPG）",
+									"href": "page/rpg.html",
+									"icon": "fa fa-user-secret",
+									"target": "_self"
+								},
+								{
+									"title": "多人竞技（MOBA）",
+									"href": "page/game-moba.html",
+									"icon": "fa fa-users-line",
+									"target": "_self"
+								},
+								{
+									"title": "生存沙盒",
+									"href": "page/game-sandbox.html",
+									"icon": "fa fa-cubes",
+									"target": "_self"
+								},
+								{
+									"title": "单机大作",
+									"href": "page/game-single.html",
+									"icon": "fa fa-desktop",
+									"target": "_self"
+								},
+								{
+									"title": "手游推荐",
+									"href": "page/game-mobile.html",
+									"icon": "fa fa-mobile-screen-button",
+									"target": "_self"
+								},
+								{
+									"title": "游戏攻略",
+									"href": "page/game-guide.html",
+									"icon": "fa fa-book-open-reader",
+									"target": "_self"
+								},
+								{
+									"title": "赛事资讯",
+									"href": "page/game-esports.html",
+									"icon": "fa fa-trophy",
+									"target": "_self"
+								}
+							]
+						},
+						{
+							"title": "地区板块",
+							"href": "",
+							"icon": "fa fa-map-marker",
+							"target": "_self",
+							"child":[
+								{
+									"title": "华北地区",
+									"href": "page/game-esports.html",
+									"icon": "fa fa-map-pin",
+									"target": "_self"
+								},
+								{
+									"title": "华中地区",
+									"href": "page/game-esports.html",
+									"icon": "fa fa-map-pin",
+									"target": "_self"
+								},
+								{
+									"title": "华东地区",
+									"href": "page/game-esports.html",
+									"icon": "fa fa-map-pin",
+									"target": "_self"
+								},
+								{
+									"title": "东北地区",
+									"href": "page/game-esports.html",
+									"icon": "fa fa-map-pin",
+									"target": "_self"
+								},
+								{
+									"title": "华南地区",
+									"href": "page/game-esports.html",
+									"icon": "fa fa-map-pin",
+									"target": "_self"
+								},
+								{
+									"title": "西南地区",
+									"href": "page/game-esports.html",
+									"icon": "fa fa-map-pin",
+									"target": "_self"
+								},
+								{
+									"title": "西北地区",
+									"href": "page/game-esports.html",
+									"icon": "fa fa-map-pin",
+									"target": "_self"
+								}
+							]
+						}
+					]
+				},
+				{
+					"title": "菜单管理",
+					"href": "page/menu.html",
+					"icon": "fa fa-list-alt",
+					"target": "_self"
+				},
+				{
+					"title": "系统设置",
+					"href": "page/setting.html",
+					"icon": "fa fa-cogs",
+					"target": "_self"
+				},
+				{
+					"title": "用户管理",
+					"href": "page/table.html",
+					"icon": "fa fa-users",
+					"target": "_self"
+				},
+				{
+					"title": "内容审核",
+					"href": "",
+					"icon": "fa fa-check-square-o",
+					"target": "_self",
+					"child":[{
+						"title": "帖子审核",
+						"href": "page/帖子审核.html",
+						"icon": "fa fa-file-text",
+						"target": "_self"
+					},
+					{
+						"title": "评论审核",
+						"href": "page/评论审核.html",
+						"icon": "fa fa-comments",
+						"target": "_self"
+					},
+					{
+						"title": "违规处理",
+						"href": "page/违规处理.html",
+						"icon": "fa fa-exclamation-triangle",
+						"target": "_self"
+					}]
+				},
+				{
+					"title": "个人中心",
+					"href": "",
+					"icon": "fa fa-user-circle",
+					"target": "_self",
+					"child":[{
+						"title": "私信管理",
+						"href": "page/私信.html",
+						"icon": "fa fa-envelope-square",
+						"target": "_self"
+					},
+					{
+						"title": "消息通知",
+						"href": "page/通知.html",
+						"icon": "fa fa-bell",
+						"target": "_self"
+					},
+					{
+						"title": "资料编辑",
+						"href": "page/user-setting.html",
+						"icon": "fa fa-edit",
+						"target": "_self"
+					}]
+				}
+			]
+		},
+		{
+			"title": "贴吧工具",
+			"icon": "fa fa-wrench",
+			"href": "",
+			"target": "_self",
+			"child": [{
+					"title": "图标库",
+					"href": "page/icon.html",
+					"icon": "fa fa-dot-circle-o",
+					"target": "_self"
+				},
+				{
+					"title": "图标选择",
+					"href": "page/icon-picker.html",
+					"icon": "fa fa-adn",
+					"target": "_self"
+				},
+				{
+					"title": "颜色选择",
+					"href": "page/color-select.html",
+					"icon": "fa fa-dashboard",
+					"target": "_self"
+				},
+				{
+					"title": "下拉选择",
+					"href": "page/table-select.html",
+					"icon": "fa fa-angle-double-down",
+					"target": "_self"
+				},
+				{
+					"title": "图片上传",
+					"href": "page/upload.html",
+					"icon": "fa fa-upload",
+					"target": "_self"
+				},
+				{
+					"title": "富文本编辑器",
+					"href": "page/editor.html",
+					"icon": "fa fa-pencil-square-o",
+					"target": "_self"
+				},
+				{
+					"title": "地区选择器",
+					"href": "page/area.html",
+					"icon": "fa fa-map",
+					"target": "_self"
+				}
+			]
+		},
+		{
+			"title": "帮助中心",
+			"icon": "fa fa-question-circle",
+			"href": "",
+			"target": "_self",
+			"child": [{
+					"title": "操作指南",
+					"href": "",
+					"icon": "fa fa-book",
+					"target": "_self",
+					"child": [{
+						"title": "板块创建",
+						"href": "page/button.html?v=1",
+						"icon": "fa fa-plus-square",
+						"target": "_self"
+					},
+					{
+						"title": "审核流程",
+						"href": "page/button.html?v=2",
+						"icon": "fa fa-list-ol",
+						"target": "_self"
+					},
+					{
+						"title": "按钮3",
+						"href": "page/button.html?v=3",
+						"icon": "fa fa-snowflake-o",
+						"target": "_self"
+					},
+					{
+						"title": "表单4",
+						"href": "page/form.html?v=1",
+						"icon": "fa fa-calendar",
+						"target": "_self"
+					}]
+				},
+				{
+					"title": "常见问题",
+					"href": "page/error.html",
+					"icon": "fa fa-question-circle",
+					"target": "_self"
+				}
+			]
+		}
+	]
+}
